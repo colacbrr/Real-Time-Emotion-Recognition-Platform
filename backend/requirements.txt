@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+numpy
+scikit-image
+scikit-learn
+joblib
+torch
+torchvision
+torchaudio
+git+https://github.com/openai/CLIP.git
+faiss-cpu
+pillow
+ollama

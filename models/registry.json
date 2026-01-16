@@ -1,0 +1,41 @@
+{
+  "models": [
+    {
+      "name": "hog_svm",
+      "extractor": "hog",
+      "feature_params": {
+        "orientations": 9,
+        "pixels_per_cell": [
+          8,
+          8
+        ],
+        "cells_per_block": [
+          2,
+          2
+        ],
+        "block_norm": "L2-Hys"
+      },
+      "svm_params": {
+        "kernel": "rbf",
+        "C": 10.0,
+        "gamma": "scale"
+      },
+      "description": "HOG + RBF SVM baseline"
+    },
+    {
+      "name": "lbp_svm",
+      "extractor": "lbp",
+      "feature_params": {
+        "P": 8,
+        "R": 1,
+        "method": "uniform"
+      },
+      "svm_params": {
+        "kernel": "rbf",
+        "C": 10.0,
+        "gamma": "scale"
+      },
+      "description": "LBP (uniform) + RBF SVM baseline"
+    }
+  ]
+}

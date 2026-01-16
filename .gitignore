@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environments
+.venv/
+backend/.venv/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Data and outputs
+dataset/
+outputs/
+reports/
+metrics.jsonl
+
+# Model artifacts
+models/*.joblib
+models/*.pt
+models/*.meta.json
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.Zone.Identifier
