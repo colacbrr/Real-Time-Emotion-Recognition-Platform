@@ -22,6 +22,17 @@
         |           v
         |      [Eticheta + Scor]
         |
+        +--> [Pipeline CNN]
+        |           |
+        |           v
+        |  [ResNet / EfficientNet]
+        |           |
+        |           v
+        |   [Softmax + Ensemble]
+        |           |
+        |           v
+        |      [Eticheta + Scor]
+        |
         +--> [Pipeline MIR (optional)]
         |           |
         |           v

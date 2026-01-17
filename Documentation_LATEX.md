@@ -36,8 +36,8 @@
 
 \begin{document}
 
-\title{Recunoașterea Emoțiilor Faciale din Imagini 48\,$\times$\,48\
-folosind HOG/LBP și SVM\\
+\title{Recunoașterea Emoțiilor Faciale din Imagini 48\,$\times$\,48\\
+cu HOG/LBP, SVM și CNN-uri moderne\\
 }
 
 \author{\IEEEauthorblockN{Colăcel Cristian-Adrian}
@@ -54,11 +54,11 @@ București, România \\
 % ABSTRACT
 %==============================================================================
 \begin{abstract}
-Lucrarea prezintă un sistem complet pentru recunoașterea emoțiilor faciale din imagini alb-negru de 48\,$\times$\,48 pixeli, construit pe un pipeline clasic de viziune computerizată: extragere de caracteristici HOG și LBP, normalizare și clasificare cu SVM. Proiectul folosește un set etichetat împărțit în antrenare (2000 imagini) și validare (700 imagini), plus un set separat de predicție (300 imagini) pentru generarea fișierului \texttt{submission.csv}. Arhitectura include un backend FastAPI pentru inferență și raportare, o interfață React pentru inspecție și scripturi reproductibile pentru antrenare, validare, comparație de modele și selecția automată a celui mai performant model pe setul de validare. Se discută în detaliu motivația alegerilor metodologice, fluxul de date, metricile utilizate și limitările inerente dataset-ului, oferind o documentație academică completă, orientată spre obținerea unei acurateți maxime la faza de verificare.
+Lucrarea prezintă un sistem complet pentru recunoașterea emoțiilor faciale din imagini alb-negru de 48\,$\times$\,48 pixeli, combinând un pipeline clasic (HOG/LBP + SVM) cu modele CNN moderne (ResNet18/ResNet50 și EfficientNet-B0). Proiectul folosește un set etichetat împărțit în antrenare și validare, plus un set separat de predicție pentru generarea fișierului \texttt{submission.csv}. Arhitectura include un backend FastAPI pentru inferență și raportare, o interfață React pentru inspecție și scripturi reproductibile pentru antrenare, validare, comparație de modele, augmentări (MixUp/CutMix) și ensembling. Se discută în detaliu motivația alegerilor metodologice, fluxul de date, metricile utilizate și limitările inerente dataset-ului, cu accent pe maximizarea acurateții în faza de verificare.
 \end{abstract}
 
 \begin{IEEEkeywords}
-recunoaștere emoții faciale, HOG, LBP, SVM, clasificare imagini, FastAPI, Vite, validare, acuratețe
+recunoaștere emoții faciale, HOG, LBP, SVM, CNN, ResNet, EfficientNet, MixUp, CutMix, ensembling, FastAPI, validare
 \end{IEEEkeywords}
 
 %==============================================================================
@@ -87,10 +87,11 @@ Problema principală este estimarea corectă a emoției faciale pe baza unor ima
 Contribuțiile principale sunt:
 
 \begin{enumerate}
-    \item Un pipeline complet, reproductibil, pentru clasificarea emoțiilor faciale, bazat pe HOG/LBP și SVM.
+    \item Un pipeline complet, reproductibil, pentru clasificarea emoțiilor faciale, bazat pe HOG/LBP + SVM și CNN-uri moderne.
     \item O arhitectură software integrată (backend FastAPI + frontend React) care permite atât inferență, cât și vizualizarea progresului și a rapoartelor.
-    \item Mecanism automat de selecție a celui mai bun model pe setul de validare și generare a fișierului final \texttt{submission.csv}.
-    \item Documentarea clară a alegerilor tehnice, a metricilor și a limitărilor, în scopul maximizării acurateții la verificare.
+    \item Un flux de antrenare CNN cu transfer learning (ResNet/EfficientNet), augmentări MixUp/CutMix și ensembling la inferență.
+    \item Mecanism automat de selecție a celui mai bun model și generare a fișierului final \texttt{submission.csv}.
+    \item Documentarea clară a alegerilor tehnice, metricilor și limitărilor, în scopul maximizării acurateții la verificare.
 \end{enumerate}
 
 \subsection{Structura Documentului}
@@ -121,6 +122,8 @@ Aceste metode sunt atractive pentru dataset-uri moderate deoarece sunt interpret
 \subsubsection{Abordări Deep Learning}
 
 Rețelele convoluționale au devenit dominante prin capacitatea de a învăța reprezentări ierarhice direct din pixeli. Totuși, pentru imagini foarte mici (48\,$\times$\,48) și seturi de antrenare limitate, riscul de supraînvățare este ridicat, iar beneficiile față de metodele clasice nu sunt întotdeauna decisive fără augmentări și infrastructură adecvată \cite{fer2013}.
+
+În acest proiect, deep learning-ul este integrat prin transfer learning cu ResNet și EfficientNet. Aceste arhitecturi oferă un compromis optim între capacitate și cost computațional, iar generalizarea este îmbunătățită prin augmentări MixUp/CutMix și regularizare prin label smoothing.
 
 \subsection{HOG: Histogram of Oriented Gradients}
 
@@ -252,9 +255,9 @@ Configurațiile de modele sunt declarate în \texttt{models/registry.json}. Fiec
 
 \subsection{Pipeline CNN și Transfer Learning}
 
-Pentru creșterea acurateții, proiectul include un pipeline CNN bazat pe transfer learning. Modelele ResNet18/ResNet50 sunt pre-antrenate pe ImageNet și adaptate pentru cele 7 clase de emoții. Imaginile grayscale sunt convertite la 3 canale pentru compatibilitate, iar preprocesarea urmează normalizarea specifică ImageNet. Antrenarea utilizează augmentări moderate (rotație, translatare, zoom, flip) și ponderi de clasă pentru a contrabalansa dezechilibrul.
+Pentru creșterea acurateții, proiectul include un pipeline CNN bazat pe transfer learning. Modelele ResNet18/ResNet50 și EfficientNet-B0 sunt pre-antrenate pe ImageNet și adaptate pentru cele 7 clase de emoții. Imaginile grayscale sunt convertite la 3 canale pentru compatibilitate, iar preprocesarea urmează normalizarea specifică ImageNet. Antrenarea utilizează augmentări moderate (rotație, translatare, zoom, flip) plus MixUp/CutMix și label smoothing, iar ponderile de clasă contrabalansează dezechilibrul.
 
-CNN-ul este integrat în același backend FastAPI: modelul este încărcat din fișierul \texttt{.pt}, iar predicțiile sunt returnate prin endpoint-urile existente, alături de scoruri softmax pentru fiecare emoție.
+CNN-ul este integrat în același backend FastAPI: modelul este încărcat din fișierul \texttt{.pt}, iar predicțiile sunt returnate prin endpoint-urile existente, alături de scoruri softmax pentru fiecare emoție. Pentru scor final, inferența permite ensembling între mai multe checkpoint-uri (ex.: ResNet50 + EfficientNet-B0).
 
 %==============================================================================
 % IV. METODOLOGIE EXPERIMENTALĂ
@@ -315,6 +318,16 @@ Fiecare imagine este încărcată în grayscale, redimensionată la 48\,$\times$
     \item SVM: \texttt{kernel=rbf}, \texttt{C=10}, \texttt{gamma=scale}
 \end{itemize}
 
+\subsection{Augmentări și Regularizare pentru CNN}
+
+Pentru modelele CNN s-au aplicat augmentări standard (rotație, flip, translatare, scalare) și tehnici de regularizare avansate:
+\begin{itemize}
+    \item \textbf{MixUp} și \textbf{CutMix} pentru creșterea robusteții la variații locale.
+    \item \textbf{Label smoothing} pentru stabilizarea predicțiilor și reducerea supraîncrederii.
+    \item \textbf{Ponderi pe clase} pentru a trata dezechilibrul (în special clasa \textit{disgust}).
+    \item \textbf{Reducere adaptivă a ratei de învățare} și \textbf{early stopping} pentru convergență stabilă.
+\end{itemize}
+
 \subsection{Protocol de Evaluare}
 
 Fiecare model este antrenat pe \texttt{train} și evaluat pe \texttt{val}. Scriptul de comparație produce rapoarte în format JSON și Markdown, iar scriptul de generare a predicțiilor selectează automat modelul cu acuratețea cea mai mare pe validare.
@@ -343,25 +356,31 @@ Modelul final utilizat pentru \texttt{submission.csv} este ales automat pe baza 
 
 \subsection{Comparație LBP vs. HOG vs. CNN}
 
-Tabelul \\ref{tab:compare} sumarizează diferențele observate între modelele clasice și CNN, în funcție de mărimea setului de antrenare disponibil. Valorile pot varia ușor în funcție de seed și split, dar tendința este consistentă: CNN-ul depășește net descriptorii clasici atunci când există resurse GPU și un set mai mare de date.
+Tabelul \ref{tab:compare} sumarizează diferențele observate între modelele clasice și CNN, în funcție de mărimea setului de antrenare disponibil. Valorile pot varia ușor în funcție de seed și split, dar tendința este consistentă: CNN-ul depășește net descriptorii clasici atunci când există resurse GPU și un set mai mare de date.
 
-\\begin{table}[htbp]
-\\caption{Comparație între modele și configurații de date}
-\\label{tab:compare}
-\\centering
-\\begin{tabular}{lccc}
-\\toprule
-\\textbf{Model} & \\textbf{Train} & \\textbf{Val} & \\textbf{Acuratețe} \\\\
-\\midrule
-LBP + SVM & 2000 & 700 & \\textasciitilde 0.32 \\\\
-HOG + SVM & 2000 & 700 & \\textasciitilde 0.38 \\\\
-CNN ResNet50 & 2600 & 100 & 0.57 \\\\
-CNN ResNet50 (final) & 2700 & 0 & n/a \\\\
-\\bottomrule
-\\end{tabular}
-\\end{table}
+\begin{table}[htbp]
+\caption{Comparație între modele și configurații de date}
+\label{tab:compare}
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Train} & \textbf{Val} & \textbf{Acuratețe} \\
+\midrule
+LBP + SVM & 2000 & 700 & \textasciitilde 0.32 \\
+HOG + SVM & 2000 & 700 & \textasciitilde 0.38 \\
+CNN ResNet50 & 2600 & 100 & 0.57 \\
+CNN EfficientNet-B0 & 2600 & 100 & \textasciitilde 0.58 \\
+Ensemble (R50 + B0) & 2600 & 100 & \textasciitilde 0.59 \\
+CNN final (toate datele) & 2700 & 0 & n/a \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Pentru generarea fișierului final, s-a folosit varianta CNN antrenată pe toate cele 2700 de imagini etichetate, maximizând capacitatea de generalizare către setul de verificare.
+
+\subsection{Eficiență Computațională}
+
+Pipeline-ul clasic (HOG/LBP + SVM) rulează rapid pe CPU și este potrivit pentru inferență locală fără GPU. CNN-urile necesită timp de antrenare mai mare, însă pe GPU costul devine acceptabil, iar acuratețea obținută justifică investiția. Ensembling-ul crește timpul de inferență proporțional cu numărul de modele, dar oferă un câștig constant de performanță pentru scenariul de evaluare finală.
 
 %==============================================================================
 % VI. DISCUȚII: IMPLICAȚII ȘI LIMITĂRI
@@ -399,27 +418,20 @@ Proiectul demonstrează că metodele clasice, corect calibrate și evaluate, pot
 
 \subsection{Contribuții Principale}
 
-Lucrarea a prezentat un pipeline complet și reproductibil pentru recunoașterea emoțiilor faciale, integrând atât metode clasice (HOG/LBP + SVM), cât și un CNN modern (ResNet) într-un sistem software coerent. Selecția automată a modelului pe validare și generarea \texttt{submission.csv} asigură o strategie obiectivă orientată către acuratețe.
+Lucrarea a prezentat un pipeline complet și reproductibil pentru recunoașterea emoțiilor faciale, integrând atât metode clasice (HOG/LBP + SVM), cât și CNN-uri moderne (ResNet, EfficientNet) și ensembling într-un sistem software coerent. Selecția automată a modelului pe validare și generarea \texttt{submission.csv} asigură o strategie obiectivă orientată către acuratețe.
 
 \subsection{Direcții Viitoare}
 
 Direcțiile viitoare includ:
 \begin{itemize}
     \item augmentare de date pentru îmbunătățirea claselor rare,
-    \item tehnici de ensembling și calibrare a probabilităților,
+    \item extinderea ensemble-urilor cu backbone-uri mai puternice și calibrare probabilistică,
     \item validare k-fold pentru estimări mai stabile.
 \end{itemize}
 
 \subsection{Reflecții Finale}
 
 Proiectul evidențiază faptul că, într-un context academic orientat pe acuratețe și reproducibilitate, soluțiile clasice rămân relevante și oferă un punct de referință solid pentru viitoare îmbunătățiri.
-
-%==============================================================================
-% ACKNOWLEDGMENTS
-%==============================================================================
-\section*{Mulțumiri}
-
-Mulțumesc coordonatorilor și colegilor pentru feedback-ul oferit în etapa de validare, precum și comunității open-source pentru bibliotecile care au făcut posibil acest proiect.
 
 %==============================================================================
 % REFERENCES

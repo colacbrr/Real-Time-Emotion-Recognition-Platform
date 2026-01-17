@@ -219,6 +219,8 @@ def eval_epoch(model, loader, criterion, device):
     model.eval()
     total_loss = 0.0
     total_acc = 0.0
+    if len(loader.dataset) == 0:
+        return 0.0, 0.0
     with torch.no_grad():
         for imgs, labels in loader:
             imgs = imgs.to(device)
@@ -228,6 +230,8 @@ def eval_epoch(model, loader, criterion, device):
             total_loss += loss.item() * imgs.size(0)
             total_acc += accuracy(outputs.argmax(dim=1), labels) * imgs.size(0)
     count = len(loader.dataset)
+    if count == 0:
+        return 0.0, 0.0
     return total_loss / count, total_acc / count
 
 
