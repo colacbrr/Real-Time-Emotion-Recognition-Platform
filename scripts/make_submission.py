@@ -63,6 +63,8 @@ def build_features(image_ids, base_dir, extractor_name, params):
 
 
 def list_predict_ids():
+    if not PREDICT_DIR.exists():
+        raise SystemExit(f"Missing prediction directory: {PREDICT_DIR}")
     image_ids = []
     for path in PREDICT_DIR.glob("*.jpg"):
         try:
@@ -73,6 +75,8 @@ def list_predict_ids():
 
 
 def load_labels(csv_path: Path):
+    if not csv_path.exists():
+        raise SystemExit(f"Missing labels CSV: {csv_path}")
     image_ids = []
     labels = []
     with csv_path.open(newline="", encoding="utf-8") as f:
@@ -181,6 +185,12 @@ def main():
         action="store_true",
         help="Retrain the selected model before generating the submission.",
     )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT_CSV,
+        help="Path to the output CSV file.",
+    )
     args = parser.parse_args()
 
     if args.best and (args.model_path or args.model_name):
@@ -233,13 +243,14 @@ def main():
     features = build_features(predict_ids, PREDICT_DIR, extractor, feature_params)
     preds = pipeline.predict(features)
 
-    with OUTPUT_CSV.open("w", newline="", encoding="utf-8") as f:
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    with args.output.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["id", "label"])
         for image_id, label in zip(predict_ids, preds):
             writer.writerow([image_id, label])
 
-    print(f"Wrote {OUTPUT_CSV}")
+    print(f"Wrote {args.output}")
 
 
 if __name__ == "__main__":

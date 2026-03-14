@@ -89,6 +89,8 @@ Stop services later with:
 ./stop.sh
 ```
 
+Task shortcuts are also available through `make help`.
+
 ## Training Examples
 
 Recommended CNN commands:
@@ -108,12 +110,16 @@ Other useful scripts in `scripts/`:
 - `make_submission.py`
 - `predict_submission.py`
 
+The shared training/evaluation scripts are summarized in `scripts/README.md`.
+
 ## Documentation
 
 - `Documentation_LATEX.md`
 - `docs/ARCHITECTURE.md`
 - `docs/ACCURACY.md`
 - `Schema.md`
+- `scripts/README.md`
+- `LICENSE`
 
 ## Notes For Reviewers
 

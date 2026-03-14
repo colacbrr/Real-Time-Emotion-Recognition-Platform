@@ -54,6 +54,8 @@ def build_features(image_ids, extractor_name, params):
 
 
 def list_predict_ids():
+    if not PREDICT_DIR.exists():
+        raise SystemExit(f"Missing prediction directory: {PREDICT_DIR}")
     image_ids = []
     for path in PREDICT_DIR.glob("*.jpg"):
         try:
@@ -87,6 +89,12 @@ def main():
         default=ROOT / "models" / "registry.json",
         help="Path to models registry JSON.",
     )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT_CSV,
+        help="Path to the output CSV file.",
+    )
     args = parser.parse_args()
 
     if args.model_path:
@@ -115,13 +123,14 @@ def main():
     features = build_features(predict_ids, extractor, feature_params)
     preds = pipeline.predict(features)
 
-    with OUTPUT_CSV.open("w", newline="", encoding="utf-8") as f:
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    with args.output.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["id", "label"])
         for image_id, label in zip(predict_ids, preds):
             writer.writerow([image_id, label])
 
-    print(f"Wrote {OUTPUT_CSV}")
+    print(f"Wrote {args.output}")
 
 
 if __name__ == "__main__":

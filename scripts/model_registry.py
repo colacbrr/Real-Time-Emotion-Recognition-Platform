@@ -13,10 +13,15 @@ def load_registry(path: Path = DEFAULT_REGISTRY) -> list[dict]:
     models = data.get("models", [])
     if not isinstance(models, list) or not models:
         raise SystemExit("Registry must contain a non-empty 'models' list.")
+    seen_names = set()
     for entry in models:
         for key in ("name", "extractor", "feature_params", "svm_params"):
             if key not in entry:
                 raise SystemExit(f"Model entry missing '{key}': {entry}")
+        model_name = entry["name"]
+        if model_name in seen_names:
+            raise SystemExit(f"Duplicate model name in registry: {model_name}")
+        seen_names.add(model_name)
     return models
 
 

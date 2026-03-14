@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import csv
 import random
 import shutil
@@ -14,12 +15,14 @@ SOURCE_LABELS = ROOT / "train.csv"
 TRAIN_CSV = ROOT / "dataset" / "train.csv"
 VAL_CSV = ROOT / "dataset" / "val.csv"
 
-TRAIN_COUNT = 2000
-VAL_COUNT = 700
-RANDOM_SEED = 42
+DEFAULT_TRAIN_COUNT = 2000
+DEFAULT_VAL_COUNT = 700
+DEFAULT_RANDOM_SEED = 42
 
 
 def load_labeled_ids():
+    if not SOURCE_LABELS.exists():
+        raise SystemExit(f"Missing source labels CSV: {SOURCE_LABELS}")
     image_ids = []
     labels = {}
     with SOURCE_LABELS.open(newline="", encoding="utf-8") as f:
@@ -63,28 +66,51 @@ def write_split_csv(path: Path, image_ids, labels):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Split raw labeled images into train/val/predict folders.")
+    parser.add_argument("--train-count", type=int, default=DEFAULT_TRAIN_COUNT)
+    parser.add_argument("--val-count", type=int, default=DEFAULT_VAL_COUNT)
+    parser.add_argument("--seed", type=int, default=DEFAULT_RANDOM_SEED)
+    parser.add_argument(
+        "--copy",
+        action="store_true",
+        help="Copy images instead of moving them out of the raw dataset directory.",
+    )
+    args = parser.parse_args()
+
+    if not RAW_DIR.exists():
+        raise SystemExit(f"Missing raw dataset directory: {RAW_DIR}")
+
     labeled_ids, labels = load_labeled_ids()
     labeled_ids = sorted(labeled_ids)
-    if len(labeled_ids) != TRAIN_COUNT + VAL_COUNT:
+    expected_count = args.train_count + args.val_count
+    if len(labeled_ids) != expected_count:
         raise SystemExit(
-            f"Expected {TRAIN_COUNT + VAL_COUNT} labeled images, got {len(labeled_ids)}."
+            f"Expected {expected_count} labeled images, got {len(labeled_ids)}."
         )
 
-    rng = random.Random(RANDOM_SEED)
+    rng = random.Random(args.seed)
     rng.shuffle(labeled_ids)
-    train_ids = sorted(labeled_ids[:TRAIN_COUNT])
-    val_ids = sorted(labeled_ids[TRAIN_COUNT:])
+    train_ids = sorted(labeled_ids[: args.train_count])
+    val_ids = sorted(labeled_ids[args.train_count :])
 
     raw_ids = set(list_image_ids(RAW_DIR))
     labeled_set = set(labeled_ids)
     predict_ids = sorted(raw_ids - labeled_set)
 
-    for image_id in train_ids:
-        move_image(image_id, TRAIN_DIR)
-    for image_id in val_ids:
-        move_image(image_id, VAL_DIR)
-    for image_id in predict_ids:
-        move_image(image_id, PREDICT_DIR)
+    transfer = shutil.copy2 if args.copy else shutil.move
+    for image_id, target_dir in (
+        *((image_id, TRAIN_DIR) for image_id in train_ids),
+        *((image_id, VAL_DIR) for image_id in val_ids),
+        *((image_id, PREDICT_DIR) for image_id in predict_ids),
+    ):
+        target_dir.mkdir(parents=True, exist_ok=True)
+        source_path = RAW_DIR / f"{image_id}.jpg"
+        target_path = target_dir / f"{image_id}.jpg"
+        if target_path.exists():
+            continue
+        if not source_path.exists():
+            raise FileNotFoundError(f"Missing image {image_id}.jpg in {RAW_DIR}")
+        transfer(str(source_path), str(target_path))
 
     write_split_csv(TRAIN_CSV, train_ids, labels)
     write_split_csv(VAL_CSV, val_ids, labels)

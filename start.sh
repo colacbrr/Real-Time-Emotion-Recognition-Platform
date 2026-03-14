@@ -22,6 +22,11 @@ trap cleanup EXIT
 
 cd "$FRONTEND_DIR"
 if [ ! -d "node_modules" ]; then
-  npm install
+  if [ -f "package-lock.json" ]; then
+    npm ci
+  else
+    npm install
+  fi
 fi
+printf "Backend: http://localhost:8000\nFrontend: http://localhost:5173\n"
 npm run dev
