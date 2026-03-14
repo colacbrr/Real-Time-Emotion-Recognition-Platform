@@ -23,6 +23,7 @@ metrics.jsonl
 models/*.joblib
 models/*.pt
 models/*.meta.json
+submission.csv
 
 # OS/editor
 .DS_Store

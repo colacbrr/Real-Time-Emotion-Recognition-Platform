@@ -925,7 +925,7 @@ def root():
               <li><a href="/status">/status</a></li>
               <li><a href="/docs">/docs</a></li>
             </ul>
-            <pre>cd /home/colac/School/Colacel_Cristian-Proiect-ASPICV-Python/frontend
+            <pre>cd frontend
 npm install
 npm run dev</pre>
           </body>

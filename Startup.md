@@ -4,7 +4,7 @@ This project has a backend (FastAPI) and a frontend (Vite).
 
 ## One-command startup
 
-From `Colacel_Cristian-Proiect-ASPICV-Python`:
+From the repository root:
 
 ```bash
 chmod +x start.sh
@@ -19,7 +19,7 @@ To stop the backend later:
 
 ## Backend
 
-From `Colacel_Cristian-Proiect-ASPICV-Python/backend`:
+From `backend`:
 
 ```bash
 cd backend
@@ -34,7 +34,7 @@ Notes:
 
 ## Frontend
 
-From `Colacel_Cristian-Proiect-ASPICV-Python/frontend`:
+From `frontend`:
 
 ```bash
 npm install
