@@ -2,7 +2,7 @@
 
 Extended facial emotion recognition repository that adds multimedia retrieval and a full-stack demo around the core prediction workflows.
 
-This project builds on the same model families as the smaller `Emotion-Face-Prediction` repo:
+This project builds on the same model families as the smaller `Emotion-Face-Prediction-updated` repo:
 - classical pipelines using HOG/LBP features with SVM classifiers
 - CNN-based pipelines using architectures such as ResNet and EfficientNet
 
@@ -22,12 +22,12 @@ It also includes a FastAPI backend, a React frontend, model registry metadata, a
 - adds MIR and image-retrieval flows on top of emotion prediction
 - is meant for interactive demos and broader multimedia exploration
 
-If you only want the clean ML training/evaluation project, use the separate `Emotion-Face-Prediction` repository instead.
+If you only want the clean ML training/evaluation project, use the separate `Emotion-Face-Prediction-updated` repository instead.
 
 ## Repository Layout
 
 ```text
-Emotion-Face-Prediction-MIR/
+Emotion-Face-Prediction-MIR-updated/
 ├── backend/                # FastAPI application
 ├── frontend/               # React + Vite interface
 ├── scripts/                # training and evaluation scripts
