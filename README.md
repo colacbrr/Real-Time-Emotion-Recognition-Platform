@@ -8,6 +8,8 @@ This project builds on the same model families as the smaller `Emotion-Face-Pred
 
 It also includes a FastAPI backend, a React frontend, model registry metadata, and utility scripts for training, validation, comparison, and submission generation.
 
+Portfolio case study: https://cristiancolacel.com/projects/emotion-recognition-platform
+
 ## Project Goals
 
 - compare classical computer vision baselines against CNN models
