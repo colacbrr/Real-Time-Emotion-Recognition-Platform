@@ -1,0 +1,13 @@
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{Validare încrucișată} & \multicolumn{2}{c}{Evaluare separată} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Model & Acuratețe (\%) & Macro-F1 & Acuratețe (\%) & Macro-F1 \\
+\midrule
+Majoritar & 24,55 & 0,0563 & 24,75 & 0,0567 \\
+HOG + SVM liniar & 28,66 & 0,2520 & 30,84 & 0,2758 \\
+HOG + SVM RBF & 39,29 & 0,3096 & 39,49 & 0,3157 \\
+ResNet18 + SVM liniar & 37,60 & 0,3263 & 33,99 & 0,3011 \\
+ResNet18 + SVM RBF & 44,03 & 0,3692 & 39,49 & 0,3528 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,25 @@
+{
+  "protocol_sha256": "4f3a0216a8b7e6b6dcc9e0e8b22327a095fe0773613f7d686547b9d8ac226d39",
+  "purpose": "cost only; not model-selection evidence",
+  "pilot": {
+    "hog": {
+      "sample_n": 140,
+      "extraction_seconds": 0.067945876999147,
+      "linear_all_image_extraction_estimate_seconds": 1.251174792170007,
+      "linear_fit_seconds": 0.007370312001512502,
+      "rbf_fit_seconds": 0.004760403999171103
+    },
+    "resnet": {
+      "sample_n": 140,
+      "extraction_seconds": 3.534688333000304,
+      "linear_all_image_extraction_estimate_seconds": 65.08876087481988,
+      "linear_fit_seconds": 0.00388060899967968,
+      "rbf_fit_seconds": 0.003175727000780171
+    }
+  },
+  "svm_fits": 240,
+  "budget_seconds": 900,
+  "limit_policy": "stop at completed model/fold boundary if >15min; report incomplete without fabrication",
+  "estimate": "CPU extraction roughly linear in images; 240 SVM fits may scale superlinearly; conservative 5–15 min budget, no fine-tuning",
+  "hardware": "CPU; torch maximum 4 threads; see v1 hardware record"
+}

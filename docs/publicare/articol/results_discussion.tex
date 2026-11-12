@@ -1,0 +1,34 @@
+For pooled OOF predictions, ResNet18--RBF reaches 44.03\% accuracy and 36.92\%
+macro-F1, compared with 39.29\% and 30.96\% for HOG--RBF. Their macro-F1
+difference is 5.96 percentage points, with a conditional paired 95\% interval
+of [3.17, 8.76] points and a four-comparison interval of [2.57, 9.59].
+These intervals describe the saved predictions; they do not establish a
+population-level advantage after accounting for training-fold dependence.
+
+On the separate 509-image source-test subset, both RBF pipelines correctly
+classify 201 images (39.49\% accuracy). Their macro-F1 values nevertheless
+differ: 31.57\% for HOG and 35.28\% for ResNet18. The paired macro-F1 difference
+is 3.71 points, with a 95\% interval of [-2.35, 9.72] and a four-comparison
+interval of [-4.19, 11.89]. This sample does not resolve a clear advantage in
+that comparison under the stated resampling scheme. Equal total correct counts
+do not imply identical errors or class-wise performance.
+
+Changing the head also matters. OOF macro-F1 increases from 25.20\% to 30.96\%
+for HOG when using RBF instead of linear, and from 32.63\% to 36.92\% for
+ResNet18. Thus a comparison with unmatched heads would conflate representation
+and classifier effects. Final development-only selection chooses $C=0.1$ for
+both linear heads and $C=10$ for both RBF heads. These selections are exported
+with every inner-fold score, including unsuccessful candidates.
+
+The majority baseline yields 24.75\% accuracy but only 5.67\% macro-F1 on the
+source-test subset. Its degenerate conditional interval is a consequence of
+class-stratified resampling with fixed class counts in this cohort, not proof
+that its population performance has no uncertainty. All four learned pipelines
+exceed this simple baseline in point estimates, while none approaches a reliable
+seven-class deployment system.
+
+The complete v2 run, including fixed extraction, selection, prediction, and
+bootstrap summaries, took 114.80 seconds on this machine. Recorded feature
+extraction took 0.95 seconds for HOG and 27.18 seconds for the frozen ResNet18
+over all 2,578 active images. These one-run cached batch timings are descriptive
+and are not a replicated speed benchmark.

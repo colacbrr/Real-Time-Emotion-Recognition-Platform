@@ -1,0 +1,30 @@
+{
+  "review_file": "docs/publicare/duplicate_review.csv",
+  "review_sha256": "ae6586021a2dc7d53ca97f6b9e71af69a34e2687ecb517c4087ab6a526babe3e",
+  "historical_manifest_sha256": "b17ee848b9b3d145061554785d9f3e94fcc640e8a024418cbfe32535c097489a",
+  "recovery_audit_sha256": "0edaf8fac95c2e1b3ba8d11ba6d08c6182727400f9586091da1d042b57d1273e",
+  "candidates_sha256": "9893ec79ebca4b3a0c59a30ff9642b6e7ac1cca4f2774217a393865d7691b8fb",
+  "evidence_provenance_sha256": "0683d89cfd5aa672243b9ffc4b9c827667abdc8820bc8e7bf5eabed5a1cb6916",
+  "evidence_template_sha256": "2db0c77f1e5b510468767e461805cbbc383f410c194e65092a33769e7044d8e3",
+  "review_script_sha256": "3929811fe501084971b5d8d3747fb69fc6520c710f636408cff7f691a80f3918",
+  "policy_script_sha256": "20dd992704088e1267abb13718cf9e7f71438e2b69d38a0848b0bc9ef71ac8f0",
+  "proposal_sha256": "101cadcb0064d6fbfa2b40bb1bc66fbed528f0d9280b860d169397485a3887b3",
+  "proposal_summary_sha256": "5de2fe6252a232bafbbc82d6b72adf89fc3e24815d7ddcea080fec680ab1202f",
+  "sheets": {
+    "candidates_01.png": "25d28676035906beeb154b85133fa379d654c5beb21a643154caeff432ae8d85",
+    "candidates_02.png": "7cb0455ed6ccb1ccc666f34c7a3789a71bdf4c05311b00a925eb484dd6199c1c",
+    "candidates_03.png": "0ba1569d95ce2c10e7e31af3d7b65202ffc6ea969175cca316862de89385e561",
+    "candidates_04.png": "87c2cad4f6907e6885790e05e17f61a8da1fc1d8d4d8016e2935cc19c276cea6",
+    "candidates_05.png": "f433d5775ee6d64c06ef59398f090be0b2919825d16413c2a80effce397e96af",
+    "candidates_06.png": "412f7c00b433ac7e37ad9162e117814d8e4290d5cebe6b758b769d3965e0c81d",
+    "candidates_07.png": "69d9e6ad4a9e035609fbb24cd050c612e89443c7744b4946b3f8cf2c8f21c5b7"
+  },
+  "reviewer": "assistant_visual_review_v1",
+  "independent_second_review": false,
+  "scope": "Image duplication only; no person identity inference; no automatic relabeling",
+  "decisions": {
+    "near_duplicate": 37,
+    "different_image": 87,
+    "uncertain": 2
+  }
+}

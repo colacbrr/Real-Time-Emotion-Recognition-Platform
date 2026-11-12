@@ -1,0 +1,137 @@
+{
+  "protocol_id": "internal-retrospective-v1",
+  "status": "frozen before new model fitting or test metric evaluation",
+  "scope": "Retrospective exploratory evaluation within the recovered official labeled training pool; does not replace the official 300-image test.",
+  "source_root": "/home/colac/Projects/Academic/03_WSL_SCHOOL_COPY/School_WSL_HOME/aspicv-project",
+  "inventory_summary_sha256": "01847608cf3bba2b463512612a0397cecea1444c9c99bc274c76bd0234ae907f",
+  "manifest_sha256": "29aa1ebdad60bc55a672a3abc5bc2d3685bfa05654a2da53c7d5a74b9376dfc8",
+  "split_csv_sha256": "8c7c422a707c6d576c14227d62ce022bb02856d0217a40ed1d9e1f4132f35204",
+  "split_seed": 42,
+  "test_folds": 5,
+  "val_folds": 4,
+  "split_algorithm": "nested StratifiedGroupKFold, first fold at both stages; exact hashes, reviewed image groups, supplied subject IDs are grouped before stratification",
+  "split_sizes": {
+    "train": 1605,
+    "val": 536,
+    "test": 536
+  },
+  "class_counts": {
+    "train": {
+      "fear": 244,
+      "happy": 383,
+      "neutral": 293,
+      "sad": 269,
+      "angry": 212,
+      "surprise": 181,
+      "disgust": 23
+    },
+    "val": {
+      "neutral": 98,
+      "happy": 128,
+      "fear": 81,
+      "sad": 90,
+      "disgust": 7,
+      "surprise": 61,
+      "angry": 71
+    },
+    "test": {
+      "surprise": 61,
+      "neutral": 97,
+      "fear": 82,
+      "sad": 89,
+      "angry": 71,
+      "happy": 128,
+      "disgust": 8
+    }
+  },
+  "labels": [
+    "angry",
+    "disgust",
+    "fear",
+    "happy",
+    "neutral",
+    "sad",
+    "surprise"
+  ],
+  "models": {
+    "baseline": {
+      "rule": "majority class in train; lexical tie break"
+    },
+    "hog": {
+      "resize": [
+        48,
+        48
+      ],
+      "gray_scaling": "float32 /255",
+      "orientations": 9,
+      "pixels_per_cell": [
+        8,
+        8
+      ],
+      "cells_per_block": [
+        2,
+        2
+      ],
+      "block_norm": "L2-Hys",
+      "scaler": "StandardScaler fit on train only",
+      "SVC": {
+        "C": 10.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      },
+      "tuning": "none"
+    },
+    "cnn": {
+      "architecture": "resnet18",
+      "weights": "IMAGENET1K_V1",
+      "weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+      "backbone": "frozen eval mode; official weights transforms",
+      "head": "Linear(512,7)",
+      "optimizer": "Adam lr=0.001",
+      "loss": "unweighted cross entropy",
+      "epochs": 10,
+      "batch_size": 16,
+      "seed": 42,
+      "selection": "highest val macro-F1; first at tie",
+      "augmentation": "none"
+    }
+  },
+  "test_policy": "evaluate saved validation artifacts without fitting; one scheduled test export per model; no hyperparameter changes based on test",
+  "metrics": [
+    "accuracy",
+    "macro_f1",
+    "recall_per_class",
+    "support_per_class",
+    "confusion_matrix"
+  ],
+  "hardware": {
+    "cpu_model": "13th Gen Intel(R) Core(TM) i5-13600KF",
+    "affinity_cpus": 20,
+    "cnn_threads_max": 4,
+    "device": "cpu; CUDA unavailable",
+    "platform": "Linux-7.3.1-1-cachyos-x86_64-with-glibc2.44"
+  },
+  "python": "3.14.9",
+  "versions": {
+    "numpy": "2.5.1",
+    "scikit-learn": "1.9.0",
+    "scikit-image": "0.26.0",
+    "torch": "2.13.0",
+    "torchvision": "0.28.0",
+    "Pillow": "12.3.0"
+  },
+  "code_sha256": {
+    "build_internal_inventory.py": "eb15b755815b842f00705fd82ec8fa88649b76c9956319d4d00f5c8e7ff4ec68",
+    "split_protocol.py": "74e674be7e1f82716cd18290796e252a74b4e553024de23b3472c968aa722320",
+    "evaluation.py": "db752f6f77ad5899c5e53b15daaebadf9bd956b949ef7e191e8ef603f3e83fbd",
+    "recover_resnet18_weights.py": "5f86aa9ca93d0a97b5a676c2efba548228fce1b1deb38323c8858cf7a07f85e7"
+  },
+  "limitations": [
+    "Original labeled pool previously explored; test is not historically untouched",
+    "No subject metadata; person independence not established",
+    "Near-duplicate screening incomplete and single assistant review",
+    "Source dataset license and official test labels unresolved",
+    "Remaining within-split copies retained with groups; metrics are per image and not per unique photograph",
+    "Single seed and frozen-backbone configuration; no general claim that one model family is superior"
+  ]
+}

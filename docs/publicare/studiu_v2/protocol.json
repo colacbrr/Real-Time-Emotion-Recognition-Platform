@@ -1,0 +1,100 @@
+{
+  "id": "source-aligned-retrospective-v2",
+  "date": "2026-11-12",
+  "scope": "educational audit/reproducibility; no new algorithm; retrospective, not untouched benchmark",
+  "cohort_sha256": "8eb760a88d3bd4b7dad7868f739816546ee88d00748611bb18a368b80663419f",
+  "folds_sha256": "cdf2d7bc00ee287f9e77312082f37442829c34d8bd8061d5c9f920f9c4eb18c3",
+  "inputs": {
+    "outputs/internal-inventory-v1/eligible_inventory.csv": "5d290953d229039339d7478957e3c44bad9f2e116badd8b9703c76537f9c1b6b",
+    "outputs/fer2013-content-match-v1/content_matches.csv": "a20ff46f40ebe32554c81066a293d448250dc7bca46647110b80455110216803",
+    "outputs/pretrained/resnet18-f37072fd.pth": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+    "/home/colac/Projects/GitHub Repository/Real-Time-Emotion-Recognition-Platform/scripts/scientific_study.py": "ff50604e95ac1ca1b958d6124098cc5e5b58ba3bf7357cfeb7f1fa1b87dfc010",
+    "/home/colac/Projects/GitHub Repository/Real-Time-Emotion-Recognition-Platform/scripts/evaluation.py": "db752f6f77ad5899c5e53b15daaebadf9bd956b949ef7e191e8ef603f3e83fbd"
+  },
+  "counts": {
+    "development": 2069,
+    "excluded_ambiguous_source_split": 96,
+    "holdout": 509,
+    "excluded_known_group_crossing": 3
+  },
+  "class_counts": {
+    "development": {
+      "fear": 314,
+      "angry": 262,
+      "neutral": 396,
+      "happy": 508,
+      "surprise": 202,
+      "sad": 361,
+      "disgust": 26
+    },
+    "holdout": {
+      "surprise": 50,
+      "neutral": 87,
+      "angry": 81,
+      "fear": 77,
+      "disgust": 8,
+      "sad": 80,
+      "happy": 126
+    }
+  },
+  "design": "5 outer grouped folds, 3 inner grouped folds; same folds for every model; final 3-fold selection on development for separate source-test subset",
+  "models": [
+    "majority",
+    "hog_linear",
+    "hog_rbf",
+    "resnet_linear",
+    "resnet_rbf"
+  ],
+  "C_grid": [
+    0.1,
+    1.0,
+    10.0
+  ],
+  "selection": "mean inner macro-F1; smaller C at exact tie",
+  "features": "unchanged evaluation.py: HOG 900; frozen ImageNet V1 ResNet18 512, official transforms; no augmentation/fine-tuning",
+  "heads": "SVC(kernel=linear/rbf), gamma=scale for RBF; StandardScaler fit on each training fold only; unweighted classes",
+  "baseline": "train-fold majority; lexical tie break",
+  "labels": [
+    "angry",
+    "disgust",
+    "fear",
+    "happy",
+    "neutral",
+    "sad",
+    "surprise"
+  ],
+  "metrics": "per-image accuracy, macro-F1 (primary), recall/class, confusion matrix; pooled OOF primary; fold scores descriptive",
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 20261121,
+    "unit": "known image group; stratified by true class",
+    "interval": "percentile 95%; pairs also Bonferroni 98.75% for four comparisons",
+    "pairs": [
+      [
+        "resnet_rbf",
+        "hog_rbf"
+      ],
+      [
+        "resnet_linear",
+        "hog_linear"
+      ],
+      [
+        "hog_rbf",
+        "hog_linear"
+      ],
+      [
+        "resnet_rbf",
+        "resnet_linear"
+      ]
+    ],
+    "caveat": "conditional on realized fitted predictions; no refitting; excludes training/model-selection uncertainty and unidentified people"
+  },
+  "holdout": "eligible source-test-only images; exclude known groups present in development; both-split exact matches excluded entirely; original ASPICV predict never labeled",
+  "limitations": [
+    "All local labeled data previously explored; this source-aligned holdout is retrospective",
+    "Subset sampling unknown; neither original FER2013 full benchmark nor cross-domain test",
+    "No person metadata, incomplete near-duplicate detection, single assistant review",
+    "No causal estimate of duplicate-induced score inflation; pretraining FER overlap not audited"
+  ],
+  "expected_svm_fits": 240
+}

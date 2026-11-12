@@ -1,5 +1,5 @@
 {
-  "name": "emotion-face-prediction-mir-frontend",
+  "name": "facial-expression-classification-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",

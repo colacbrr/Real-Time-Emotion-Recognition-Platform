@@ -1,0 +1,10 @@
+academic_split,reference_splits,n
+predict,test,48
+predict,test+train,15
+predict,train,237
+train,test,376
+train,test+train,74
+train,train,1550
+val,test,138
+val,test+train,25
+val,train,537

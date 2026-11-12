@@ -17,6 +17,7 @@ frontend/dist/
 dataset/
 outputs/
 reports/
+tmp/
 metrics.jsonl
 
 # Model artifacts

@@ -1,0 +1,85 @@
+{
+  "checked_on": "2026-11-09",
+  "finding": "All 3000 ASPICV images have byte-identical matches in Kaggle msambare/fer2013 version 1.",
+  "dataset_family": "FER2013",
+  "original_creators_as_reported_in_primary_paper": [
+    "Pierre Luc Carrier",
+    "Aaron Courville"
+  ],
+  "reference_distribution": {
+    "owner": "Manas Sambare",
+    "slug": "msambare/fer2013",
+    "dataset_id": 786787,
+    "version": 1,
+    "last_updated": "2020-07-19T12:24:26.627Z",
+    "page": "https://www.kaggle.com/datasets/msambare/fer2013",
+    "api": "https://www.kaggle.com/api/v1/datasets/view/msambare/fer2013"
+  },
+  "declared_distribution_license": {
+    "kaggle_display_name": "Database: Open Database, Contents: Database Contents",
+    "kaggle_code": "DbCL-1.0",
+    "database_license": "ODbL-1.0",
+    "contents_license": "DbCL-1.0",
+    "status": "declared in public uploader metadata; original image rights not independently established",
+    "database_text": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "contents_text": "https://opendatacommons.org/licenses/dbcl/1-0/",
+    "kaggle_mapping_source": "https://raw.githubusercontent.com/Kaggle/kaggle-api/main/docs/datasets_metadata.md"
+  },
+  "primary_dataset_paper": "https://arxiv.org/html/1307.0414v1",
+  "original_competition": "https://www.kaggle.com/competitions/challenges-in-representation-learning-facial-expression-recognition-challenge",
+  "content_matching": {
+    "reference_distribution": "msambare/fer2013",
+    "reference_dataset_id": 786787,
+    "reference_version": 1,
+    "reference_dataset_page": "https://www.kaggle.com/datasets/msambare/fer2013",
+    "reference_license_declaration": "Database: Open Database, Contents: Database Contents",
+    "reference_n_images": 35887,
+    "reference_class_split_counts": {
+      "test/angry": 958,
+      "test/disgust": 111,
+      "test/fear": 1024,
+      "test/happy": 1774,
+      "test/neutral": 1233,
+      "test/sad": 1247,
+      "test/surprise": 831,
+      "train/angry": 3995,
+      "train/disgust": 436,
+      "train/fear": 4097,
+      "train/happy": 7215,
+      "train/neutral": 4965,
+      "train/sad": 4830,
+      "train/surprise": 3171
+    },
+    "local_n_images": 3000,
+    "content_match_counts": {
+      "byte_exact": 3000
+    },
+    "labeled_agreement_counts": {
+      "all_candidates_agree": 2691,
+      "some_candidates_agree": 9
+    },
+    "official_unlabeled_rows": 300,
+    "unmatched_ids": [],
+    "local_manifest_sha256": "b17ee848b9b3d145061554785d9f3e94fcc640e8a024418cbfe32535c097489a",
+    "reference_archive_sha256": "9f3422c7a45b676c2965ef4fc5f3099932aa98fd13eaaa2c254f620a9894a6e9",
+    "reference_metadata_sha256": "94b305f2b83df60331632be838ed220559828172b9944198051f79a5b0508484",
+    "download_provenance_sha256": "f8da47ff29df597bda08aa69c2e5d9072580d7815815621d08d60c3840802da9",
+    "implementation_sha256": "f5f6fe3542eca2d501a57438b1788fc75461d02b4947e6fea56c05a40e05ec12",
+    "limitations": [
+      "Content correspondence does not prove the academic packager downloaded from this uploader",
+      "Uploader license declaration does not independently establish original image rights",
+      "Reference labels are candidates, not authority for academic relabeling or official test truth",
+      "Official predict reference classes and class-bearing paths withheld; no test score computed",
+      "Only exact bytes/pixels are matched; no face identity inference or approximate attribution"
+    ],
+    "output_sha256": {
+      "image_overview.csv": "bf6ee5f0ffbd159ecc902360ae9fcc68338a62d18552cc25b138febc88352243",
+      "content_matches.csv": "a20ff46f40ebe32554c81066a293d448250dc7bca46647110b80455110216803"
+    }
+  },
+  "academic_download_chain_confirmed": false,
+  "labels_changed": false,
+  "models_retrained": false,
+  "official_test_scored": false,
+  "frozen_study_records": "Protocol and numerical results retain the license-unknown statement recorded before this investigation; this is a later provenance addendum, not a rewritten experiment."
+}

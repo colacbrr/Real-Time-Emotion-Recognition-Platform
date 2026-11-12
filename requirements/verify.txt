@@ -1,0 +1,4 @@
+# Published numerical evidence only; no API, CNN execution or image archive.
+numpy
+Pillow
+scikit-learn

@@ -1,0 +1,14 @@
+{
+  "numeric_source_sha256": "ff9c3c7cfcfae00e97fa870f441e1ce1b7b3b184b6ae4786a1b7f822b85b7812",
+  "label_translation": {
+    "angry": "Furie",
+    "disgust": "Dezgust",
+    "fear": "Frică",
+    "happy": "Bucurie",
+    "neutral": "Neutru",
+    "sad": "Tristețe",
+    "surprise": "Surpriză"
+  },
+  "metrics_recomputed": false,
+  "models_fitted": false
+}

@@ -1,106 +1,43 @@
-# Schema arhitectura locala
+# Fluxurile proiectului
 
-## Flux general
+## Studiul reproductibil
 
-```
-[USER / Frontend React]
-        |
-        v
-[FastAPI Backend]
-        |
-        +--> [Pipeline ASPICV]
-        |           |
-        |           v
-        |   [Preprocesare imagini 48x48]
-        |           |
-        |           v
-        |    [HOG / LBP Features]
-        |           |
-        |           v
-        |      [SVM Model]
-        |           |
-        |           v
-        |      [Eticheta + Scor]
-        |
-        +--> [Pipeline CNN]
-        |           |
-        |           v
-        |  [ResNet / EfficientNet]
-        |           |
-        |           v
-        |   [Softmax + Ensemble]
-        |           |
-        |           v
-        |      [Eticheta + Scor]
-        |
-        +--> [Pipeline MIR (optional)]
-        |           |
-        |           v
-        |     [CLIP Encoder]
-        |           |
-        |           v
-        |      [FAISS Index]
-        |           |
-        |           v
-        |   [Rezultate + Captions]
-        |           |
-        |           v
-        |   [RAG Prompt Builder]
-        |           |
-        |           v
-        |      [Ollama (LLM)]
-        |           |
-        |           v
-        |   [Output Explicativ]
-        |
-        v
-[Frontend React]
+```text
+Imagini și etichete
+  -> manifest cu ID, hash și grup de duplicate
+  -> inventar eligibil și separare după sursă
+  -> subseturi comune de antrenare și evaluare
+  -> HOG sau trăsături ResNet18 fixe
+  -> StandardScaler ajustat exclusiv pe antrenare
+  -> SVM liniar sau RBF, cu selecție internă a parametrilor
+  -> predicții individuale
+  -> metrici, incertitudine, tabele și figuri
 ```
 
-## Detaliu: predictie (imagine -> eticheta)
+Reperul majoritar folosește numai etichetele de antrenare. [Protocolul complet](docs/publicare/studiu_v2/README.md) precizează gruparea, împărțirile și interpretarea rezultatelor.
 
-```
-Imagine (48x48, grayscale)
-  -> normalizare / resize
-  -> extractie HOG sau LBP
-  -> vector caracteristici
-  -> SVM (predictie)
-  -> eticheta emotie + scor
-  -> trimite catre UI
-```
+## Demonstrația locală
 
-## Detaliu: validare (val.csv)
-
-```
-val.csv + imagini
-  -> build features (HOG/LBP)
-  -> predictii SVM
-  -> acuratete globala
-  -> matrice de confuzie
-  -> acuratete pe clasa
-  -> raport JSON/MD
+```text
+Interfață React: imagine sau cale locală
+  -> FastAPI, backend/server.py
+  -> model local compatibil
+     -> HOG/LBP + pipeline SVM salvat
+     -> sau CNN cu arhitectura și transformările checkpoint-ului
+  -> etichetă, scoruri și timpul cererii
+  -> interfață React
 ```
 
-## Detaliu: MIR (text -> imagini + explicatii)
+Fără model funcțional, răspunsul conține o eroare, fără etichetă implicită. Scorurile afișate nu certifică probabilități calibrate.
 
-```
-Query text
-  -> CLIP text encoder (embedding)
-  -> FAISS search (top-k)
-  -> rezultate: fisiere + scoruri + caption
-  -> RAG prompt + Ollama (opțional)
-  -> raspuns explicativ
-  -> trimite catre UI
-```
+## Rutele API
 
-## Endpoint-uri relevante
+- `POST /predict`: clasifică o imagine cu modelul selectat.
+- `POST /compare`: compară predicțiile modelelor pentru aceeași imagine; nu evaluează un set de validare.
+- `GET /models`: listează modelele încărcate.
+- `GET /reports`: afișează rapoartele locale.
+- `GET /status`: starea modelelor și rezumatul imaginilor disponibile.
+- `GET /events`: evenimente despre inițializare.
+- `GET /logs`: jurnalul serverului.
 
-- `/predict` : imagine -> eticheta emotie
-- `/compare` : comparatie modele pe setul de validare
-- `/reports` : rapoarte generate (validare/comparatie)
-- `/status` : stare backend
-- `/events` : progres incarcare modele
-- `/search` : cautare text -> imagini (MIR)
-- `/rag` : cautare + raspuns LLM (MIR)
-- `/explain` : raspuns LLM pe rezultate deja obtinute (MIR)
-- `/ollama/models` : modele disponibile (MIR)
+La pornire se încarcă artefactele locale, fără antrenare sau descărcare. Demonstrația și studiul controlat au fluxuri de evaluare distincte.

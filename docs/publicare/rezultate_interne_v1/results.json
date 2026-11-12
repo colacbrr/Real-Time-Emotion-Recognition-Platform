@@ -1,0 +1,397 @@
+{
+  "study": "internal-retrospective-v1",
+  "status": "exploratory; not official benchmark results",
+  "protocol_sha256": "486b59306e3e8cd82b1b49461dfd89e12ba7a1c74299fa557061972d3cc8b7a9",
+  "manifest_sha256": "29aa1ebdad60bc55a672a3abc5bc2d3685bfa05654a2da53c7d5a74b9376dfc8",
+  "split_sizes": {
+    "train": 1605,
+    "val": 536,
+    "test": 536
+  },
+  "labels": [
+    "angry",
+    "disgust",
+    "fear",
+    "happy",
+    "neutral",
+    "sad",
+    "surprise"
+  ],
+  "hardware": {
+    "cpu_model": "13th Gen Intel(R) Core(TM) i5-13600KF",
+    "affinity_cpus": 20,
+    "cnn_threads_max": 4,
+    "device": "cpu; CUDA unavailable",
+    "platform": "Linux-7.3.1-1-cachyos-x86_64-with-glibc2.44"
+  },
+  "versions": {
+    "numpy": "2.5.1",
+    "scikit-learn": "1.9.0",
+    "scikit-image": "0.26.0",
+    "torch": "2.13.0",
+    "torchvision": "0.28.0",
+    "Pillow": "12.3.0"
+  },
+  "models": [
+    {
+      "model": "baseline",
+      "n": 536,
+      "labels": [
+        "angry",
+        "disgust",
+        "fear",
+        "happy",
+        "neutral",
+        "sad",
+        "surprise"
+      ],
+      "accuracy": 0.23880597014925373,
+      "macro_f1": 0.055077452667814115,
+      "recall_per_class": {
+        "angry": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "happy": 1.0,
+        "neutral": 0.0,
+        "sad": 0.0,
+        "surprise": 0.0
+      },
+      "support_per_class": {
+        "surprise": 61,
+        "neutral": 97,
+        "fear": 82,
+        "sad": 89,
+        "angry": 71,
+        "happy": 128,
+        "disgust": 8
+      },
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          82,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          128,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          97,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          89,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          61,
+          0,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+      "validation_accuracy": 0.23880597014925373,
+      "validation_macro_f1": 0.055077452667814115,
+      "fit_seconds": 0.005840829999215202,
+      "validation_inference_seconds": 7.760008884361014e-07,
+      "test_inference_seconds": 0.00011818900020443834,
+      "test_inference_batch_size": 536,
+      "fitted_artifact_bytes": 40,
+      "external_backbone_bytes": 0,
+      "selected_epoch": null,
+      "fit_metrics_sha256": "606f4bc74e6307ffdada3b5e8625182ef7c7f763fa9491769d64803c3124d9d4",
+      "test_metrics_sha256": "dbb722ff7ae1229a8e36704df395d893bd97ade5e98565005769667460bed06e",
+      "predictions_sha256": "64780e4dd3547244ce3ec6c7f81a9fa96cd507c4ccd6f32e099467c9022e6c19",
+      "predictions_path": "/home/colac/Projects/GitHub Repository/Real-Time-Emotion-Recognition-Platform/outputs/internal-runs-v1/baseline-test/predictions.csv",
+      "artifact_sha256": "d837d7930b083a42d4cfeb6b271e4f74ab8c3fbf628cf3c0121c4f1b67ebbcfe"
+    },
+    {
+      "model": "hog",
+      "n": 536,
+      "labels": [
+        "angry",
+        "disgust",
+        "fear",
+        "happy",
+        "neutral",
+        "sad",
+        "surprise"
+      ],
+      "accuracy": 0.38619402985074625,
+      "macro_f1": 0.35792510905834823,
+      "recall_per_class": {
+        "angry": 0.2676056338028169,
+        "disgust": 0.25,
+        "fear": 0.14634146341463414,
+        "happy": 0.703125,
+        "neutral": 0.3711340206185567,
+        "sad": 0.30337078651685395,
+        "surprise": 0.3442622950819672
+      },
+      "support_per_class": {
+        "surprise": 61,
+        "neutral": 97,
+        "fear": 82,
+        "sad": 89,
+        "angry": 71,
+        "happy": 128,
+        "disgust": 8
+      },
+      "confusion_matrix": [
+        [
+          19,
+          0,
+          10,
+          17,
+          16,
+          9,
+          0
+        ],
+        [
+          1,
+          2,
+          1,
+          2,
+          1,
+          1,
+          0
+        ],
+        [
+          6,
+          0,
+          12,
+          14,
+          15,
+          25,
+          10
+        ],
+        [
+          8,
+          0,
+          7,
+          90,
+          9,
+          13,
+          1
+        ],
+        [
+          9,
+          0,
+          7,
+          18,
+          36,
+          17,
+          10
+        ],
+        [
+          8,
+          0,
+          9,
+          18,
+          22,
+          27,
+          5
+        ],
+        [
+          9,
+          0,
+          12,
+          13,
+          4,
+          2,
+          21
+        ]
+      ],
+      "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+      "validation_accuracy": 0.3880597014925373,
+      "validation_macro_f1": 0.3169888010224145,
+      "fit_seconds": 1.5995283810007095,
+      "validation_inference_seconds": 0.4041444859994954,
+      "test_inference_seconds": 0.4821245960010856,
+      "test_inference_batch_size": 536,
+      "fitted_artifact_bytes": 11536557,
+      "external_backbone_bytes": 0,
+      "selected_epoch": null,
+      "fit_metrics_sha256": "62a239bbe5d84688f45fcd427e52ee2a847b8d22b1f3e86d73f2a9560807e4b1",
+      "test_metrics_sha256": "971166f1720cf68d73ad4eac5ba6e4e8b0f29329f71b33e74ea2bbf5f0419bf5",
+      "predictions_sha256": "426971d8440654809c9362edf30c3f6dbd1bb71228bab6778e554ac4dd2684ea",
+      "predictions_path": "/home/colac/Projects/GitHub Repository/Real-Time-Emotion-Recognition-Platform/outputs/internal-runs-v1/hog-test/predictions.csv",
+      "artifact_sha256": "5262c26cd71ee9906e535670035cd821a4b9bf2996302f90384fd2c052831865"
+    },
+    {
+      "model": "cnn",
+      "n": 536,
+      "labels": [
+        "angry",
+        "disgust",
+        "fear",
+        "happy",
+        "neutral",
+        "sad",
+        "surprise"
+      ],
+      "accuracy": 0.4048507462686567,
+      "macro_f1": 0.31705270459170365,
+      "recall_per_class": {
+        "angry": 0.4507042253521127,
+        "disgust": 0.0,
+        "fear": 0.1951219512195122,
+        "happy": 0.7421875,
+        "neutral": 0.3402061855670103,
+        "sad": 0.12359550561797752,
+        "surprise": 0.4918032786885246
+      },
+      "support_per_class": {
+        "surprise": 61,
+        "neutral": 97,
+        "fear": 82,
+        "sad": 89,
+        "angry": 71,
+        "happy": 128,
+        "disgust": 8
+      },
+      "confusion_matrix": [
+        [
+          32,
+          0,
+          6,
+          17,
+          9,
+          5,
+          2
+        ],
+        [
+          3,
+          0,
+          1,
+          3,
+          0,
+          1,
+          0
+        ],
+        [
+          17,
+          0,
+          16,
+          24,
+          14,
+          4,
+          7
+        ],
+        [
+          13,
+          0,
+          6,
+          95,
+          5,
+          2,
+          7
+        ],
+        [
+          15,
+          0,
+          3,
+          34,
+          33,
+          3,
+          9
+        ],
+        [
+          22,
+          0,
+          8,
+          26,
+          17,
+          11,
+          5
+        ],
+        [
+          7,
+          0,
+          2,
+          16,
+          6,
+          0,
+          30
+        ]
+      ],
+      "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+      "validation_accuracy": 0.44216417910447764,
+      "validation_macro_f1": 0.3570260644663999,
+      "fit_seconds": 25.077196182999614,
+      "validation_inference_seconds": 5.653221028000189,
+      "test_inference_seconds": 8.041484707999189,
+      "test_inference_batch_size": 16,
+      "fitted_artifact_bytes": 16589,
+      "external_backbone_bytes": 46830571,
+      "selected_epoch": 9,
+      "fit_metrics_sha256": "cd45c859da1d4b6197a459c6a404b8db853ffefea897fb1d989b8cd9f8618eb1",
+      "test_metrics_sha256": "87a958a37afaaafd0640b118f35dded89a4c89abf13d57d43be61020ba933e73",
+      "predictions_sha256": "1178730d94cf1ca5ccef61121c60b53ef302257b51841860f631f99b4ce6bf92",
+      "predictions_path": "/home/colac/Projects/GitHub Repository/Real-Time-Emotion-Recognition-Platform/outputs/internal-runs-v1/cnn-test/predictions.csv",
+      "artifact_sha256": "626c5ad5cf1c1ebcbc1c542f07c43a27875cbef552aeda98a9518ae78155a535"
+    }
+  ],
+  "limitations": [
+    "Original labeled pool previously explored; test is not historically untouched",
+    "No subject metadata; person independence not established",
+    "Near-duplicate screening incomplete and single assistant review",
+    "Source dataset license and official test labels unresolved",
+    "Remaining within-split copies retained with groups; metrics are per image and not per unique photograph",
+    "Single seed and frozen-backbone configuration; no general claim that one model family is superior"
+  ],
+  "cost_estimate": {
+    "kind": "rough CPU estimate, not an experiment result",
+    "sample_train_only": 16,
+    "sample_seconds_including_load": 1.4036196880006173,
+    "estimated_all_split_extraction_seconds": 234.84311904860328,
+    "head_pilot_steps": 10,
+    "head_pilot_step_seconds": 0.003873517400097626,
+    "estimated_head_seconds": 3.885622141972931,
+    "epochs": 10,
+    "limitations": "Includes model loading in each extraction; disk/cache variation; validation, hash audit and serialization excluded. Small-sample extrapolation; allow margin and review before a long run."
+  },
+  "timing_scope": "fit includes train/validation feature extraction, fitting, checkpoint selection and serialization; test inference includes artifact load and preprocessing, excludes hash audit; CPU batch timings, not service latency",
+  "implementation_sha256": "cfa32776eb988c7667a54b5f1a07c43fb55e46b5ae004306b2f5a2121ccdfde9"
+}

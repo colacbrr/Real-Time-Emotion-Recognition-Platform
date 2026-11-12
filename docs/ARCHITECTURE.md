@@ -1,30 +1,25 @@
 # Architecture
 
-This project merges two pipelines into a single, standalone stack:
+The repository contains an offline facial-expression study and a local classification demonstration.
 
-- ASPICV facial emotion inference (HOG/LBP feature extraction + SVM classifiers).
-- TEM MIR search (CLIP embeddings + FAISS index + optional RAG explanations).
+## Scientific study
 
-## Top-level layout
+The manifest identifies images, labels, hashes and known duplicate groups. Evaluation keeps groups together, fits preprocessing on training data only, and compares HOG with frozen ResNet18 features under common SVM heads. Predictions, class supports, accuracy, macro-F1, recall, confusion matrices and conditional uncertainty are exported.
 
-- `backend/`: FastAPI API that serves predictions, comparisons, reports, and MIR.
-- `frontend/`: Vite + React control room UI.
-- `dataset/`: `train/`, `val/`, and `predict/` image splits plus CSV metadata.
-- `models/`: trained model artifacts and `registry.json` metadata.
-- `reports/`: validation and model comparison reports.
-- `outputs/`: generated CLIP embeddings + FAISS metadata for MIR search.
-- `scripts/`: training/validation utilities for ASPICV models.
+The [controlled study](publicare/studiu_v2/README.md) records configurations and folds. Historical reports remain separate. Demonstration scores do not replace this evaluation.
 
-## Data flow
+## Local demonstration
 
-1. Training utilities (`scripts/`) build or validate models using `dataset/`.
-2. Model artifacts land in `models/` with JSON metadata for reproducibility.
-3. Backend loads `models/` and `dataset/` to serve `/predict` and `/compare`.
-4. MIR builds CLIP embeddings from labeled images and stores them in `outputs/`.
-5. Frontend visualizes predictions, comparisons, MIR results, and reports.
+- `backend/server.py`: FastAPI service for prediction, model comparison, availability, reports and initialization events.
+- `frontend/`: React/Vite interface for selecting an image and inspecting predictions.
+- `dataset/`: local images and academic labels, not included in Git.
+- `models/`: compatible classical `.joblib` artifacts with `.meta.json`, and historical CNN `.pt` checkpoints.
+- `reports/`: local historical validation/comparison reports.
+- `outputs/`: offline study inventories, fixed features, model artifacts and predictions; ignored by Git.
+- `scripts/`: training, provenance, audit, evaluation and document tools.
 
-## Accuracy focus
+Startup loads local model artifacts and counts images, without training or network downloads. Classical prediction extracts HOG or LBP and applies the saved pipeline. CNN prediction reconstructs the checkpoint architecture and preprocessing. Without a usable model, prediction returns an explicit error.
 
-Accuracy on the labeled validation set is the primary metric. Use the scripts
-in `scripts/` to compare model configs, validate chosen models, and generate
-prediction outputs for the unlabeled set.
+The backend accepts historical checkpoint formats. The scientific v2 SVMs on cached HOG/ResNet18 features are evaluated through dedicated scripts and are not automatically imported into the demonstration.
+
+See [Startup.md](../Startup.md). The interface does not establish deployment readiness or real-time performance.

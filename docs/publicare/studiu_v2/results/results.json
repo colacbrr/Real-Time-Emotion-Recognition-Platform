@@ -1,0 +1,1334 @@
+{
+  "protocol_sha256": "4f3a0216a8b7e6b6dcc9e0e8b22327a095fe0773613f7d686547b9d8ac226d39",
+  "timings": {
+    "hog_fixed_extraction_seconds": 0.9465004179983225,
+    "resnet_fixed_extraction_seconds": 27.177340107999044
+  },
+  "versions": {
+    "numpy": "2.5.1",
+    "scikit-learn": "1.9.0",
+    "torch": "2.13.0",
+    "torchvision": "0.28.0"
+  },
+  "evaluations": {
+    "oof": {
+      "models": {
+        "majority": {
+          "n": 2069,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.24552924117931368,
+          "macro_f1": 0.056322412550584844,
+          "recall_per_class": {
+            "angry": 0.0,
+            "disgust": 0.0,
+            "fear": 0.0,
+            "happy": 1.0,
+            "neutral": 0.0,
+            "sad": 0.0,
+            "surprise": 0.0
+          },
+          "support_per_class": {
+            "fear": 314,
+            "angry": 262,
+            "neutral": 396,
+            "happy": 508,
+            "surprise": 202,
+            "sad": 361,
+            "disgust": 26
+          },
+          "confusion_matrix": [
+            [
+              0,
+              0,
+              0,
+              262,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              26,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              314,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              508,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              396,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              361,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              202,
+              0,
+              0,
+              0
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "hog_linear": {
+          "n": 2069,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.28661188980183666,
+          "macro_f1": 0.25202538299276583,
+          "recall_per_class": {
+            "angry": 0.2480916030534351,
+            "disgust": 0.11538461538461539,
+            "fear": 0.24203821656050956,
+            "happy": 0.46653543307086615,
+            "neutral": 0.25252525252525254,
+            "sad": 0.16066481994459833,
+            "surprise": 0.26732673267326734
+          },
+          "support_per_class": {
+            "fear": 314,
+            "angry": 262,
+            "neutral": 396,
+            "happy": 508,
+            "surprise": 202,
+            "sad": 361,
+            "disgust": 26
+          },
+          "confusion_matrix": [
+            [
+              65,
+              6,
+              43,
+              50,
+              44,
+              40,
+              14
+            ],
+            [
+              5,
+              3,
+              4,
+              3,
+              1,
+              8,
+              2
+            ],
+            [
+              72,
+              2,
+              76,
+              52,
+              37,
+              52,
+              23
+            ],
+            [
+              84,
+              2,
+              62,
+              237,
+              54,
+              43,
+              26
+            ],
+            [
+              74,
+              4,
+              56,
+              73,
+              100,
+              60,
+              29
+            ],
+            [
+              61,
+              2,
+              75,
+              78,
+              69,
+              58,
+              18
+            ],
+            [
+              20,
+              1,
+              44,
+              29,
+              39,
+              15,
+              54
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "hog_rbf": {
+          "n": 2069,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.3929434509424843,
+          "macro_f1": 0.30959606747935825,
+          "recall_per_class": {
+            "angry": 0.19083969465648856,
+            "disgust": 0.0,
+            "fear": 0.22929936305732485,
+            "happy": 0.6889763779527559,
+            "neutral": 0.4065656565656566,
+            "sad": 0.3074792243767313,
+            "surprise": 0.3415841584158416
+          },
+          "support_per_class": {
+            "fear": 314,
+            "angry": 262,
+            "neutral": 396,
+            "happy": 508,
+            "surprise": 202,
+            "sad": 361,
+            "disgust": 26
+          },
+          "confusion_matrix": [
+            [
+              50,
+              0,
+              42,
+              52,
+              46,
+              63,
+              9
+            ],
+            [
+              5,
+              0,
+              7,
+              4,
+              3,
+              5,
+              2
+            ],
+            [
+              32,
+              0,
+              72,
+              53,
+              57,
+              73,
+              27
+            ],
+            [
+              26,
+              0,
+              19,
+              350,
+              50,
+              57,
+              6
+            ],
+            [
+              18,
+              0,
+              42,
+              78,
+              161,
+              82,
+              15
+            ],
+            [
+              31,
+              0,
+              43,
+              83,
+              86,
+              111,
+              7
+            ],
+            [
+              13,
+              0,
+              31,
+              33,
+              35,
+              21,
+              69
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "resnet_linear": {
+          "n": 2069,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.3760270662155631,
+          "macro_f1": 0.32626424093550505,
+          "recall_per_class": {
+            "angry": 0.2862595419847328,
+            "disgust": 0.07692307692307693,
+            "fear": 0.2484076433121019,
+            "happy": 0.5649606299212598,
+            "neutral": 0.3409090909090909,
+            "sad": 0.3074792243767313,
+            "surprise": 0.44554455445544555
+          },
+          "support_per_class": {
+            "fear": 314,
+            "angry": 262,
+            "neutral": 396,
+            "happy": 508,
+            "surprise": 202,
+            "sad": 361,
+            "disgust": 26
+          },
+          "confusion_matrix": [
+            [
+              75,
+              6,
+              53,
+              44,
+              36,
+              32,
+              16
+            ],
+            [
+              6,
+              2,
+              9,
+              3,
+              2,
+              2,
+              2
+            ],
+            [
+              63,
+              4,
+              78,
+              39,
+              43,
+              50,
+              37
+            ],
+            [
+              61,
+              6,
+              54,
+              287,
+              55,
+              28,
+              17
+            ],
+            [
+              52,
+              3,
+              71,
+              64,
+              135,
+              52,
+              19
+            ],
+            [
+              74,
+              2,
+              59,
+              44,
+              59,
+              111,
+              12
+            ],
+            [
+              20,
+              0,
+              30,
+              28,
+              28,
+              6,
+              90
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "resnet_rbf": {
+          "n": 2069,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.4403093281778637,
+          "macro_f1": 0.3692385643623283,
+          "recall_per_class": {
+            "angry": 0.22519083969465647,
+            "disgust": 0.038461538461538464,
+            "fear": 0.27070063694267515,
+            "happy": 0.6633858267716536,
+            "neutral": 0.43434343434343436,
+            "sad": 0.4376731301939058,
+            "surprise": 0.4900990099009901
+          },
+          "support_per_class": {
+            "fear": 314,
+            "angry": 262,
+            "neutral": 396,
+            "happy": 508,
+            "surprise": 202,
+            "sad": 361,
+            "disgust": 26
+          },
+          "confusion_matrix": [
+            [
+              59,
+              0,
+              42,
+              47,
+              47,
+              57,
+              10
+            ],
+            [
+              5,
+              1,
+              9,
+              5,
+              2,
+              2,
+              2
+            ],
+            [
+              37,
+              0,
+              85,
+              46,
+              53,
+              62,
+              31
+            ],
+            [
+              24,
+              0,
+              32,
+              337,
+              52,
+              47,
+              16
+            ],
+            [
+              30,
+              0,
+              41,
+              67,
+              172,
+              70,
+              16
+            ],
+            [
+              41,
+              0,
+              46,
+              39,
+              69,
+              158,
+              8
+            ],
+            [
+              11,
+              0,
+              27,
+              31,
+              23,
+              11,
+              99
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        }
+      },
+      "uncertainty": {
+        "replicates": 2000,
+        "groups": 2056,
+        "images": 2069,
+        "model_intervals_95": {
+          "majority": {
+            "accuracy": [
+              0.24409068982151472,
+              0.247098786061552
+            ],
+            "macro_f1": [
+              0.056057165014125075,
+              0.05661111529365119
+            ]
+          },
+          "hog_linear": {
+            "accuracy": [
+              0.267405729413032,
+              0.30479323823266175
+            ],
+            "macro_f1": [
+              0.2276481774409026,
+              0.2763847335289137
+            ]
+          },
+          "hog_rbf": {
+            "accuracy": [
+              0.37372784675979476,
+              0.41267671621695384
+            ],
+            "macro_f1": [
+              0.29119125929643014,
+              0.3282289909415039
+            ]
+          },
+          "resnet_linear": {
+            "accuracy": [
+              0.35610382491758646,
+              0.395651475733066
+            ],
+            "macro_f1": [
+              0.30361677511657587,
+              0.3489938516852626
+            ]
+          },
+          "resnet_rbf": {
+            "accuracy": [
+              0.420008460522765,
+              0.4608705094846399
+            ],
+            "macro_f1": [
+              0.3449808611283104,
+              0.3962994990393785
+            ]
+          }
+        },
+        "paired_differences": [
+          {
+            "a": "resnet_rbf",
+            "b": "hog_rbf",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                0.023199053233226723,
+                0.07056719752945256
+              ],
+              "macro_f1": [
+                0.03167588102565356,
+                0.08763162802434772
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                0.015934238780706187,
+                0.07763165859564171
+              ],
+              "macro_f1": [
+                0.025654835644329778,
+                0.09593831918095137
+              ]
+            }
+          },
+          {
+            "a": "resnet_linear",
+            "b": "hog_linear",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                0.06398293934759672,
+                0.1159420289855072
+              ],
+              "macro_f1": [
+                0.04230062552401926,
+                0.107964088541661
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                0.05797036847568763,
+                0.12443010241991824
+              ],
+              "macro_f1": [
+                0.03398664406625802,
+                0.11851086786139492
+              ]
+            }
+          },
+          {
+            "a": "hog_rbf",
+            "b": "hog_linear",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                0.0863039511442254,
+                0.1273607748184019
+              ],
+              "macro_f1": [
+                0.03248238050560338,
+                0.08287687694177384
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                0.08170060124767277,
+                0.13263054437828545
+              ],
+              "macro_f1": [
+                0.024556238244440948,
+                0.08819016423519731
+              ]
+            }
+          },
+          {
+            "a": "resnet_rbf",
+            "b": "resnet_linear",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                0.04257274957367065,
+                0.0849841263176556
+              ],
+              "macro_f1": [
+                0.01772624317598073,
+                0.06661589793057868
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                0.036971184360616575,
+                0.09192065909459186
+              ],
+              "macro_f1": [
+                0.01254062592074106,
+                0.07177257420390072
+              ]
+            }
+          }
+        ],
+        "scope": "conditional prediction resampling; no model refits, no person-level guarantee; OOF training-fold dependence not accounted for"
+      }
+    },
+    "holdout": {
+      "models": {
+        "majority": {
+          "n": 509,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.2475442043222004,
+          "macro_f1": 0.05669291338582677,
+          "recall_per_class": {
+            "angry": 0.0,
+            "disgust": 0.0,
+            "fear": 0.0,
+            "happy": 1.0,
+            "neutral": 0.0,
+            "sad": 0.0,
+            "surprise": 0.0
+          },
+          "support_per_class": {
+            "surprise": 50,
+            "neutral": 87,
+            "angry": 81,
+            "fear": 77,
+            "disgust": 8,
+            "sad": 80,
+            "happy": 126
+          },
+          "confusion_matrix": [
+            [
+              0,
+              0,
+              0,
+              81,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              77,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              126,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              87,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              80,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              50,
+              0,
+              0,
+              0
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "hog_linear": {
+          "n": 509,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.30844793713163066,
+          "macro_f1": 0.2757532245975598,
+          "recall_per_class": {
+            "angry": 0.2222222222222222,
+            "disgust": 0.125,
+            "fear": 0.33766233766233766,
+            "happy": 0.42857142857142855,
+            "neutral": 0.3218390804597701,
+            "sad": 0.2125,
+            "surprise": 0.26
+          },
+          "support_per_class": {
+            "surprise": 50,
+            "neutral": 87,
+            "angry": 81,
+            "fear": 77,
+            "disgust": 8,
+            "sad": 80,
+            "happy": 126
+          },
+          "confusion_matrix": [
+            [
+              18,
+              2,
+              20,
+              15,
+              13,
+              8,
+              5
+            ],
+            [
+              2,
+              1,
+              2,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              17,
+              1,
+              26,
+              12,
+              4,
+              10,
+              7
+            ],
+            [
+              22,
+              0,
+              19,
+              54,
+              14,
+              7,
+              10
+            ],
+            [
+              15,
+              1,
+              13,
+              14,
+              28,
+              11,
+              5
+            ],
+            [
+              14,
+              1,
+              24,
+              15,
+              8,
+              17,
+              1
+            ],
+            [
+              9,
+              1,
+              11,
+              6,
+              5,
+              5,
+              13
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "hog_rbf": {
+          "n": 509,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.3948919449901768,
+          "macro_f1": 0.3156625331050134,
+          "recall_per_class": {
+            "angry": 0.18518518518518517,
+            "disgust": 0.0,
+            "fear": 0.2727272727272727,
+            "happy": 0.6746031746031746,
+            "neutral": 0.45977011494252873,
+            "sad": 0.275,
+            "surprise": 0.36
+          },
+          "support_per_class": {
+            "surprise": 50,
+            "neutral": 87,
+            "angry": 81,
+            "fear": 77,
+            "disgust": 8,
+            "sad": 80,
+            "happy": 126
+          },
+          "confusion_matrix": [
+            [
+              15,
+              0,
+              11,
+              22,
+              15,
+              15,
+              3
+            ],
+            [
+              1,
+              0,
+              1,
+              2,
+              1,
+              2,
+              1
+            ],
+            [
+              12,
+              0,
+              21,
+              12,
+              14,
+              13,
+              5
+            ],
+            [
+              4,
+              0,
+              10,
+              85,
+              8,
+              14,
+              5
+            ],
+            [
+              7,
+              0,
+              10,
+              8,
+              40,
+              18,
+              4
+            ],
+            [
+              10,
+              0,
+              14,
+              16,
+              18,
+              22,
+              0
+            ],
+            [
+              7,
+              0,
+              3,
+              8,
+              9,
+              5,
+              18
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "resnet_linear": {
+          "n": 509,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.33988212180746563,
+          "macro_f1": 0.3010868361568025,
+          "recall_per_class": {
+            "angry": 0.2839506172839506,
+            "disgust": 0.125,
+            "fear": 0.33766233766233766,
+            "happy": 0.47619047619047616,
+            "neutral": 0.3563218390804598,
+            "sad": 0.2125,
+            "surprise": 0.3
+          },
+          "support_per_class": {
+            "surprise": 50,
+            "neutral": 87,
+            "angry": 81,
+            "fear": 77,
+            "disgust": 8,
+            "sad": 80,
+            "happy": 126
+          },
+          "confusion_matrix": [
+            [
+              23,
+              0,
+              14,
+              13,
+              10,
+              14,
+              7
+            ],
+            [
+              4,
+              1,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              12,
+              2,
+              26,
+              9,
+              13,
+              8,
+              7
+            ],
+            [
+              15,
+              1,
+              18,
+              60,
+              19,
+              7,
+              6
+            ],
+            [
+              12,
+              2,
+              7,
+              20,
+              31,
+              12,
+              3
+            ],
+            [
+              13,
+              1,
+              16,
+              13,
+              19,
+              17,
+              1
+            ],
+            [
+              4,
+              0,
+              18,
+              2,
+              7,
+              4,
+              15
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        },
+        "resnet_rbf": {
+          "n": 509,
+          "labels": [
+            "angry",
+            "disgust",
+            "fear",
+            "happy",
+            "neutral",
+            "sad",
+            "surprise"
+          ],
+          "accuracy": 0.3948919449901768,
+          "macro_f1": 0.3527844134095753,
+          "recall_per_class": {
+            "angry": 0.1728395061728395,
+            "disgust": 0.125,
+            "fear": 0.2987012987012987,
+            "happy": 0.5793650793650794,
+            "neutral": 0.41379310344827586,
+            "sad": 0.4125,
+            "surprise": 0.42
+          },
+          "support_per_class": {
+            "surprise": 50,
+            "neutral": 87,
+            "angry": 81,
+            "fear": 77,
+            "disgust": 8,
+            "sad": 80,
+            "happy": 126
+          },
+          "confusion_matrix": [
+            [
+              14,
+              0,
+              18,
+              13,
+              9,
+              21,
+              6
+            ],
+            [
+              3,
+              1,
+              2,
+              1,
+              0,
+              1,
+              0
+            ],
+            [
+              10,
+              0,
+              23,
+              9,
+              15,
+              13,
+              7
+            ],
+            [
+              4,
+              1,
+              9,
+              73,
+              17,
+              17,
+              5
+            ],
+            [
+              7,
+              0,
+              11,
+              14,
+              36,
+              14,
+              5
+            ],
+            [
+              6,
+              0,
+              12,
+              12,
+              16,
+              33,
+              1
+            ],
+            [
+              5,
+              0,
+              11,
+              2,
+              6,
+              5,
+              21
+            ]
+          ],
+          "confusion_matrix_axes": "rows=true, columns=predicted; order=labels",
+          "zero_division": 0
+        }
+      },
+      "uncertainty": {
+        "replicates": 2000,
+        "groups": 509,
+        "images": 509,
+        "model_intervals_95": {
+          "majority": {
+            "accuracy": [
+              0.2475442043222004,
+              0.2475442043222004
+            ],
+            "macro_f1": [
+              0.05669291338582677,
+              0.05669291338582677
+            ]
+          },
+          "hog_linear": {
+            "accuracy": [
+              0.2691552062868369,
+              0.34970530451866405
+            ],
+            "macro_f1": [
+              0.23084818102914448,
+              0.3278277006228813
+            ]
+          },
+          "hog_rbf": {
+            "accuracy": [
+              0.3555992141453831,
+              0.4361493123772102
+            ],
+            "macro_f1": [
+              0.2800335689141652,
+              0.3517119949926145
+            ]
+          },
+          "resnet_linear": {
+            "accuracy": [
+              0.3005893909626719,
+              0.3791748526522593
+            ],
+            "macro_f1": [
+              0.25449462817368634,
+              0.35030805903919104
+            ]
+          },
+          "resnet_rbf": {
+            "accuracy": [
+              0.3555992141453831,
+              0.4361493123772102
+            ],
+            "macro_f1": [
+              0.2965163872294897,
+              0.41104396923954617
+            ]
+          }
+        },
+        "paired_differences": [
+          {
+            "a": "resnet_rbf",
+            "b": "hog_rbf",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                -0.04715127701375249,
+                0.051080550098231814
+              ],
+              "macro_f1": [
+                -0.02351340024831352,
+                0.09717643014149174
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                -0.06286836935166995,
+                0.06189833005893938
+              ],
+              "macro_f1": [
+                -0.04186242964461047,
+                0.11888154705355469
+              ]
+            }
+          },
+          {
+            "a": "resnet_linear",
+            "b": "hog_linear",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                -0.021611001964636556,
+                0.0844793713163065
+              ],
+              "macro_f1": [
+                -0.045076904286172066,
+                0.09412998316948246
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                -0.037328094302554043,
+                0.10019646365422397
+              ],
+              "macro_f1": [
+                -0.0693109577533522,
+                0.11240062889628077
+              ]
+            }
+          },
+          {
+            "a": "hog_rbf",
+            "b": "hog_linear",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                0.03929273084479373,
+                0.12966601178781928
+              ],
+              "macro_f1": [
+                -0.012549410256921157,
+                0.09072697253576523
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                0.031434184675834975,
+                0.1394891944990177
+              ],
+              "macro_f1": [
+                -0.0287786763077139,
+                0.10294261938773952
+              ]
+            }
+          },
+          {
+            "a": "resnet_rbf",
+            "b": "resnet_linear",
+            "direction": "a minus b",
+            "interval_95": {
+              "accuracy": [
+                0.013752455795677798,
+                0.09430255402750493
+              ],
+              "macro_f1": [
+                0.01082743258744765,
+                0.0907142355907455
+              ]
+            },
+            "interval_familywise_95_four_pairs": {
+              "accuracy": [
+                0.003929273084479379,
+                0.10904960707269182
+              ],
+              "macro_f1": [
+                -0.0003286973455792323,
+                0.10209223348902804
+              ]
+            }
+          }
+        ],
+        "scope": "conditional prediction resampling; no model refits, no person-level guarantee; OOF training-fold dependence not accounted for"
+      }
+    }
+  },
+  "elapsed_seconds": 114.80166966399884
+}

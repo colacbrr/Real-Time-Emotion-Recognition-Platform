@@ -17,6 +17,12 @@ To stop the backend later:
 ./stop.sh
 ```
 
+Stopping is scoped to this repository's `backend/` and `frontend/` working directories on Linux. It does not terminate other projects' development servers. Inspect the selection without sending signals:
+
+```bash
+python3 scripts/stop_local_app.py --dry-run
+```
+
 ## Backend
 
 From `backend`:
@@ -25,12 +31,14 @@ From `backend`:
 cd backend
 . .venv/bin/activate
 python -m pip install -r requirements.txt
-uvicorn search_server:app --reload --port 8000
+uvicorn server:app --reload --port 8000
 ```
 
 Notes:
-- The first run builds CLIP embeddings for the MIR index (may take a while).
-- Optional: install and run Ollama to enable RAG explanations.
+- Startup loads local classification models and counts images; it does not train or download models.
+- Without a trained model, prediction returns an explicit error.
+- Configure local inputs with `ASPICV_DATASET_DIR`, `ASPICV_MODELS_DIR`, and `ASPICV_REPORTS_DIR`.
+- The demonstration serves compatible historical checkpoints from `models/`; the scientific study has a separate [evaluation workflow](docs/publicare/studiu_v2/README.md).
 
 ## Frontend
 

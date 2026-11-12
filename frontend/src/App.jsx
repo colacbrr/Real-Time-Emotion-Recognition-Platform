@@ -8,21 +8,11 @@ const formatScoreList = (scores) => {
     .join(" | ");
 };
 
-const formatPercent = (value) => {
-  if (typeof value !== "number") return "-";
-  return `${(value * 100).toFixed(1)}%`;
-};
-
 export default function App() {
   const apiBase = useMemo(
     () => (import.meta.env.VITE_ASPICV_API_BASE || "http://localhost:8000").replace(/\/$/, ""),
     []
   );
-  const mirQuickQueries = useMemo(
-    () => ["a happy face", "a surprised face", "a neutral face", "a sad face"],
-    []
-  );
-
   const [serverReady, setServerReady] = useState(null);
   const [progress, setProgress] = useState(null);
   const [metrics, setMetrics] = useState(null);
@@ -31,18 +21,12 @@ export default function App() {
   const [dataset, setDataset] = useState(null);
   const [paths, setPaths] = useState(null);
   const [statusError, setStatusError] = useState(null);
-  const [mirReady, setMirReady] = useState(null);
-  const [mirProgress, setMirProgress] = useState(null);
-  const [mirStatusError, setMirStatusError] = useState(null);
-  const [mirIndexSize, setMirIndexSize] = useState(null);
 
   const [imagePath, setImagePath] = useState("");
   const [imageBase64, setImageBase64] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
   const [previewName, setPreviewName] = useState("No image selected");
   const previewUrlRef = useRef(null);
-  const mirAbortRef = useRef(null);
-  const mirStoredModelRef = useRef(null);
 
   const [predictStatus, setPredictStatus] = useState("idle");
   const [predictError, setPredictError] = useState(null);
@@ -54,27 +38,6 @@ export default function App() {
 
   const [reports, setReports] = useState(null);
   const [activityLog, setActivityLog] = useState([]);
-  const [mirQuery, setMirQuery] = useState("");
-  const [mirDebouncedQuery, setMirDebouncedQuery] = useState("");
-  const [mirResults, setMirResults] = useState([]);
-  const [mirStatus, setMirStatus] = useState("idle");
-  const [mirError, setMirError] = useState(null);
-  const [mirLatencyMs, setMirLatencyMs] = useState(null);
-  const [mirExplainStatus, setMirExplainStatus] = useState("idle");
-  const [mirExplainError, setMirExplainError] = useState(null);
-  const [mirExplanation, setMirExplanation] = useState("");
-  const [mirExplainMeta, setMirExplainMeta] = useState(null);
-  const [mirOllamaModels, setMirOllamaModels] = useState([]);
-  const [mirSelectedModel, setMirSelectedModel] = useState("");
-  const [mirOllamaError, setMirOllamaError] = useState(null);
-
-  const resolveImageUrl = (url) => {
-    if (!url) return "";
-    if (url.startsWith("/")) {
-      return `${apiBase}${url}`;
-    }
-    return url;
-  };
 
   const addLog = (entry) => {
     setActivityLog((current) => [entry, ...current].slice(0, 8));
@@ -191,67 +154,6 @@ export default function App() {
       });
   };
 
-  const requestMirExplanation = () => {
-    if (!mirDebouncedQuery || mirResults.length === 0 || mirExplainStatus === "loading") {
-      return;
-    }
-    if (mirAbortRef.current) {
-      mirAbortRef.current.abort();
-    }
-
-    const controller = new AbortController();
-    mirAbortRef.current = controller;
-    setMirExplainStatus("loading");
-    setMirExplainError(null);
-    setMirExplainMeta(null);
-
-    const payload = {
-      query: mirDebouncedQuery,
-      model: mirSelectedModel || undefined,
-      results: mirResults.slice(0, 6).map((item) => ({
-        file_name: item.file_name,
-        score: item.score,
-        caption: item.caption || null,
-        image_url: item.image_url,
-      })),
-    };
-
-    fetch(`${apiBase}/explain`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Explain failed (${res.status})`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        const message = data.explanation || data.answer || data.summary || data.message || "";
-        if (!message) {
-          throw new Error("Raspunsul de la Ollama nu contine explicatie.");
-        }
-        setMirExplanation(message);
-        setMirExplainStatus("ready");
-        setMirExplainMeta({
-          model: data.model || data.ollama_model || null,
-          duration_ms: data.duration_ms || data.latency_ms || null,
-          prompt_tokens: data.prompt_tokens || null,
-          completion_tokens: data.completion_tokens || null,
-        });
-      })
-      .catch((err) => {
-        if (err.name === "AbortError") return;
-        setMirExplainError(err.message);
-        setMirExplainStatus("error");
-      });
-  };
-
   useEffect(() => {
     let active = true;
     fetch(`${apiBase}/status`)
@@ -263,10 +165,6 @@ export default function App() {
         setMetrics(data.metrics || null);
         setDataset(data.dataset || null);
         setPaths(data.paths || null);
-        setMirReady(data.mir ? data.mir.ready : null);
-        setMirProgress(data.mir ? data.mir.progress : null);
-        setMirStatusError(data.mir ? data.mir.error : null);
-        setMirIndexSize(data.mir ? data.mir.index_size : null);
         setModels(Array.isArray(data.models) ? data.models : []);
         if (Array.isArray(data.models) && data.models.length > 0) {
           setSelectedModel(data.models[0]);
@@ -289,15 +187,6 @@ export default function App() {
         const data = JSON.parse(event.data);
         setProgress(data);
         setServerReady(data.ready);
-        if (data.mir_progress) {
-          setMirProgress(data.mir_progress);
-        }
-        if (typeof data.mir_ready === "boolean") {
-          setMirReady(data.mir_ready);
-        }
-        if (data.mir_error) {
-          setMirStatusError(data.mir_error);
-        }
       } catch {
         // Ignore malformed events.
       }
@@ -309,111 +198,6 @@ export default function App() {
       source.close();
     };
   }, [apiBase]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setMirDebouncedQuery(mirQuery.trim());
-    }, 350);
-    return () => clearTimeout(timeout);
-  }, [mirQuery]);
-
-  useEffect(() => {
-    let active = true;
-    const stored = window.localStorage.getItem("mir_ollama_model");
-    mirStoredModelRef.current = stored;
-
-    fetch(`${apiBase}/ollama/models`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!active) return;
-        if (data.error) {
-          setMirOllamaError(data.error);
-          return;
-        }
-        const models = Array.isArray(data.models) ? data.models : [];
-        setMirOllamaModels(models);
-        const storedModel =
-          mirStoredModelRef.current && models.includes(mirStoredModelRef.current)
-            ? mirStoredModelRef.current
-            : null;
-        const defaultModel =
-          data.default && models.includes(data.default) ? data.default : models[0];
-        setMirSelectedModel(storedModel || defaultModel || "");
-      })
-      .catch((err) => {
-        if (!active) return;
-        setMirOllamaError(err.message);
-      });
-    return () => {
-      active = false;
-    };
-  }, [apiBase]);
-
-  useEffect(() => {
-    if (!mirSelectedModel) return;
-    window.localStorage.setItem("mir_ollama_model", mirSelectedModel);
-  }, [mirSelectedModel]);
-
-  useEffect(() => {
-    if (!mirDebouncedQuery) {
-      setMirResults([]);
-      setMirStatus("idle");
-      setMirError(null);
-      setMirExplanation("");
-      setMirExplainStatus("idle");
-      setMirExplainError(null);
-      setMirExplainMeta(null);
-      setMirLatencyMs(null);
-      return;
-    }
-
-    let active = true;
-    setMirStatus("loading");
-    setMirError(null);
-    setMirExplanation("");
-    setMirExplainStatus("idle");
-    setMirExplainError(null);
-    setMirExplainMeta(null);
-    setMirLatencyMs(null);
-
-    const params = new URLSearchParams({ query: mirDebouncedQuery, top_k: "6" });
-    fetch(`${apiBase}/search?${params.toString()}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Search failed (${res.status})`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (!active) return;
-        if (data.error) {
-          setMirError(data.error);
-          setMirResults([]);
-          setMirStatus("error");
-          return;
-        }
-        setMirResults(data.results || []);
-        setMirLatencyMs(typeof data.latency_ms === "number" ? data.latency_ms : null);
-        setMirStatus("ready");
-      })
-      .catch((err) => {
-        if (!active) return;
-        setMirError(err.message);
-        setMirResults([]);
-        setMirStatus("error");
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [apiBase, mirDebouncedQuery]);
-
-  useEffect(() => {
-    if (!mirDebouncedQuery) return;
-    if (mirAbortRef.current) {
-      mirAbortRef.current.abort();
-    }
-  }, [mirDebouncedQuery]);
 
   useEffect(() => {
     let active = true;
@@ -446,7 +230,7 @@ export default function App() {
       <header className="hero">
         <div>
           <div className="brand">ASPICV / Emotion Ops</div>
-          <h1>Facial emotion inference with classic models and CNNs.</h1>
+          <h1>Facial expression classification with classic models and CNNs.</h1>
           <p>
             A focused command center for testing HOG and LBP pipelines while keeping
             reports, datasets, and model snapshots in sync.
@@ -496,7 +280,8 @@ export default function App() {
         <section className="panel health-panel">
           <div className="panel-header">
             <h2>System health</h2>
-            <p>Live visibility into models, datasets, MIR index, and RAG availability.</p>
+            <p>Model availability and dataset status.</p>
+            <p>Model availability and dataset status.</p>
           </div>
           <div className="health-grid">
             <div className="health-card">
@@ -529,37 +314,6 @@ export default function App() {
                 ) : (
                   "Dataset not detected"
                 )}
-              </div>
-            </div>
-            <div className="health-card">
-              <div className="health-title">MIR index</div>
-              <div className="health-value">
-                {mirReady ? "Ready" : mirProgress?.stage === "error" ? "Error" : "Loading"}
-              </div>
-              <div className="health-meta">
-                <div>
-                  {mirStatusError
-                    ? mirStatusError
-                    : mirProgress?.message || "Waiting for MIR initialization"}
-                </div>
-                <div>Index size: {typeof mirIndexSize === "number" ? mirIndexSize : "-"}</div>
-                <div>Last query: {mirLatencyMs !== null ? `${mirLatencyMs} ms` : "-"}</div>
-              </div>
-            </div>
-            <div className="health-card">
-              <div className="health-title">RAG (Ollama)</div>
-              <div className="health-value">
-                {mirOllamaModels.length > 0 ? "Available" : "Offline"}
-              </div>
-              <div className="health-meta">
-                <div>
-                  {mirOllamaError
-                    ? mirOllamaError
-                    : mirOllamaModels.length > 0
-                      ? `${mirOllamaModels.length} model(s)`
-                      : "Start Ollama to enable explanations"}
-                </div>
-                <div>Selected: {mirSelectedModel || "-"}</div>
               </div>
             </div>
           </div>
@@ -721,152 +475,6 @@ export default function App() {
                     </div>
                     {item.warning && <div className="warning">{item.warning}</div>}
                     {item.error && <div className="warning">{item.error}</div>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="panel mir-panel">
-          <div className="panel-header">
-            <h2>CLIP + FAISS retrieval</h2>
-            <p>
-              Explore the ASPICV dataset with semantic text search and generate
-              explanations with the RAG layer.
-            </p>
-          </div>
-          <div className="mir-grid">
-            <div className="mir-controls">
-              <label htmlFor="mirQuery">Text query</label>
-              <input
-                id="mirQuery"
-                type="text"
-                value={mirQuery}
-                onChange={(event) => setMirQuery(event.target.value)}
-                placeholder="a happy face with bright eyes"
-              />
-              <div className="mir-quick">
-                {mirQuickQueries.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    className="ghost mir-chip"
-                    onClick={() => setMirQuery(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-
-              <div className="mir-status">
-                <div className="status-row">
-                  <span className="status-label">MIR index</span>
-                  <span
-                    className={`status-pill ${
-                      mirReady === true ? "ready" : mirReady === false ? "offline" : "pending"
-                    }`}
-                  >
-                    {mirReady === null && "checking"}
-                    {mirReady === true && "ready"}
-                    {mirReady === false && "offline"}
-                  </span>
-                </div>
-                {mirProgress && mirProgress.stage !== "ready" && (
-                  <div className="progress-card">
-                    <div className="progress-head">
-                      <span>{mirProgress.message || "Indexing"}</span>
-                      <span>{mirProgress.percent || 0}%</span>
-                    </div>
-                    <div className="progress-track">
-                      <div
-                        className="progress-fill"
-                        style={{ width: `${mirProgress.percent || 0}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-                {mirLatencyMs !== null && (
-                  <div className="status-note">Last search: {mirLatencyMs} ms</div>
-                )}
-                {mirStatusError && <div className="status-error">{mirStatusError}</div>}
-              </div>
-
-              <div className="panel-actions">
-                <div className="model-select">
-                  <label htmlFor="mirModelSelect">RAG model</label>
-                  <select
-                    id="mirModelSelect"
-                    value={mirSelectedModel}
-                    onChange={(event) => setMirSelectedModel(event.target.value)}
-                  >
-                    {mirOllamaModels.length === 0 && <option value="">No model</option>}
-                    {mirOllamaModels.map((model) => (
-                      <option key={model} value={model}>
-                        {model}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <button
-                  type="button"
-                  className="primary"
-                  onClick={requestMirExplanation}
-                  disabled={mirExplainStatus === "loading" || mirResults.length === 0}
-                >
-                  {mirExplainStatus === "loading" ? "Explaining..." : "Explain with RAG"}
-                </button>
-              </div>
-
-              {mirOllamaError && <div className="warning">{mirOllamaError}</div>}
-              {mirExplainError && <div className="warning">{mirExplainError}</div>}
-              <div className="mir-explain-card">
-                {mirExplainStatus === "idle" && (
-                  <div className="empty-card">Run a search, then request an explanation.</div>
-                )}
-                {mirExplainStatus === "ready" && (
-                  <pre>{mirExplanation}</pre>
-                )}
-                {mirExplainMeta?.model && (
-                  <div className="mir-meta">
-                    Model: {mirExplainMeta.model}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="mir-results">
-              <div className="status-line">
-                {mirStatus === "idle" && "Type a query to start searching."}
-                {mirStatus === "loading" && "Searching the CLIP index..."}
-                {mirStatus === "error" && `Error: ${mirError}`}
-                {mirStatus === "ready" && `${mirResults.length} results.`}
-              </div>
-              <div className="mir-results-grid">
-                {mirResults.length === 0 && (
-                  <div className="empty-card">No results yet.</div>
-                )}
-                {mirResults.map((item) => (
-                  <div
-                    key={`${item.file_name}-${item.rank}`}
-                    className="mir-result-card"
-                  >
-                    <div className="mir-thumb">
-                      {item.image_url ? (
-                        <img
-                          src={resolveImageUrl(item.image_url)}
-                          alt={item.caption || item.label}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="preview-empty">No image</div>
-                      )}
-                    </div>
-                    <div className="mir-result-meta">
-                      <strong>{item.label || "unknown"}</strong>
-                      <span>{formatPercent(item.score)}</span>
-                      <span>{item.file_name}</span>
-                    </div>
                   </div>
                 ))}
               </div>

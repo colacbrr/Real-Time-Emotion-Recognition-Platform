@@ -36,8 +36,8 @@
 
 \begin{document}
 
-\title{Recunoașterea Emoțiilor Faciale din Imagini 48\,$\times$\,48\\
-cu HOG/LBP, SVM și CNN-uri moderne\\
+\title{Clasificarea expresiilor faciale din imagini 48\,$\times$\,48\\
+Studiu educațional HOG/LBP-SVM și transfer learning\\
 }
 
 \author{\IEEEauthorblockN{Colăcel Cristian-Adrian}
@@ -50,12 +50,31 @@ București, România \\
 
 \maketitle
 
+\noindent\textbf{Statut al documentului (2026-11-09).}
+Acest text păstrează descrierea istorică a implementării. Datele și checkpoint-urile HOG/LBP au fost recuperate ulterior din copia academică indicată de utilizator. Auditul constată duplicate între split-uri și un conflict de etichete; investigația ulterioară confirmă potriviri byte cu byte pentru 3000/3000 imagini cu distribuția publică FER2013 msambare/fer2013 v1, cu declarație DbCL-1.0 / ODbL. Drepturile originale ale fotografiilor nu sunt certificate independent. Scorurile pe împărțiri
+2000/700 și 2600/100 sunt exploratorii, nereproduse și nu constituie
+o comparație controlată. Nu sunt demonstrate avantaje de generalizare,
+efecte ale augmentărilor sau funcționare real-time. Protocolul curent,
+contribuția software și limitele sunt documentate în README.md,
+docs/ACCURACY.md și docs/publicare/dataset\_card.md.
+
+
 %==============================================================================
 % ABSTRACT
 %==============================================================================
 \begin{abstract}
-Lucrarea prezintă un sistem complet pentru recunoașterea emoțiilor faciale din imagini alb-negru de 48\,$\times$\,48 pixeli, combinând un pipeline clasic (HOG/LBP + SVM) cu modele CNN moderne (ResNet18/ResNet50 și EfficientNet-B0). Proiectul folosește un set etichetat împărțit în antrenare și validare, plus un set separat de predicție pentru generarea fișierului \texttt{submission.csv}. Arhitectura include un backend FastAPI pentru inferență și raportare, o interfață React pentru inspecție și scripturi reproductibile pentru antrenare, validare, comparație de modele, augmentări (MixUp/CutMix) și ensembling. Se discută în detaliu motivația alegerilor metodologice, fluxul de date, metricile utilizate și limitările inerente dataset-ului, cu accent pe maximizarea acurateții în faza de verificare.
+Lucrarea documentează un proiect educațional pentru clasificarea expresiilor faciale etichetate, cu descriptori HOG/LBP și SVM, respectiv transfer learning. Contribuția proprie este integrarea software a preprocesării, antrenării și evaluării, alături de o demonstrație FastAPI/React. Protocolul nou începe cu un baseline majoritar, HOG-SVM și ResNet18 cu backbone înghețat, pe același manifest train/validare/test. Datele și checkpoint-urile HOG/LBP au fost recuperate și auditate. Reevaluarea HOG reproduce raportul istoric, dar acel split conține duplicate. Separat, după excluderi documentate și gruparea imaginilor, s-a executat o comparație internă retrospectivă 1605/536/536. Pe același test intern, HOG obține accuracy 0.386194 și macro-F1 0.357925, iar ResNet18 înghețat cu cap liniar accuracy 0.404851 și macro-F1 0.317053; baseline-ul majoritar are accuracy 0.238806 și macro-F1 0.055077. Scorurile istorice sunt exploratorii, fără comparație controlată; lanțul exact al drepturilor fotografiilor, separarea pe persoane și evaluarea oficială independentă rămân de verificat. Nu se afirmă deducerea stării emoționale interioare sau funcționarea real-time.
 \end{abstract}
+
+\noindent\textbf{Rezultatul intern nou și limitele lui.}
+Cele 2677 de imagini eligibile provin din pool-ul etichetat deja explorat istoric;
+23 de exemple problematice au fost reținute separat prin evidențe CSV.
+Cele 300 de imagini oficiale fără etichete nu au participat la noul split.
+Protocolul a fost fixat înaintea antrenării, iar epoca CNN a fost aleasă numai
+pe validare. CNN are accuracy mai mare, dar HOG macro-F1 mai bun în această
+singură rulare. Nu există un câștig uniform și nu se afirmă un test istoric
+neatins sau independența persoanelor. Raportul complet, predicțiile și
+matricile sunt descrise în docs/publicare/rezultate\_interne\_v1/interpretare.md.
 
 \begin{IEEEkeywords}
 recunoaștere emoții faciale, HOG, LBP, SVM, CNN, ResNet, EfficientNet, MixUp, CutMix, ensembling, FastAPI, validare
@@ -356,10 +375,10 @@ Modelul final utilizat pentru \texttt{submission.csv} este ales automat pe baza 
 
 \subsection{Comparație LBP vs. HOG vs. CNN}
 
-Tabelul \ref{tab:compare} sumarizează diferențele observate între modelele clasice și CNN, în funcție de mărimea setului de antrenare disponibil. Valorile pot varia ușor în funcție de seed și split, dar tendința este consistentă: CNN-ul depășește net descriptorii clasici atunci când există resurse GPU și un set mai mare de date.
+Tabelul \ref{tab:compare} sumarizează diferențele observate între modelele clasice și CNN, în funcție de mărimea setului de antrenare disponibil. Valorile sunt istorice și exploratorii. Diferența de split și absența artefactelor împiedică atribuirea diferențelor algoritmului sau formularea unui clasament verificat.
 
 \begin{table}[htbp]
-\caption{Comparație între modele și configurații de date}
+\caption{Scoruri istorice exploratorii, pe split-uri diferite; nereproduse}
 \label{tab:compare}
 \centering
 \begin{tabular}{lccc}
@@ -376,11 +395,11 @@ CNN final (toate datele) & 2700 & 0 & n/a \\
 \end{tabular}
 \end{table}
 
-Pentru generarea fișierului final, s-a folosit varianta CNN antrenată pe toate cele 2700 de imagini etichetate, maximizând capacitatea de generalizare către setul de verificare.
+Raportul istoric descrie antrenarea finală pe 2700 de imagini; fără artefacte, aceasta nu este verificată. Antrenarea pe toate etichetele nu furnizează o estimare independentă a generalizării.
 
 \subsection{Eficiență Computațională}
 
-Pipeline-ul clasic (HOG/LBP + SVM) rulează rapid pe CPU și este potrivit pentru inferență locală fără GPU. CNN-urile necesită timp de antrenare mai mare, însă pe GPU costul devine acceptabil, iar acuratețea obținută justifică investiția. Ensembling-ul crește timpul de inferență proporțional cu numărul de modele, dar oferă un câștig constant de performanță pentru scenariul de evaluare finală.
+Timpii de antrenare și inferență pentru datele reale nu au fost măsurați în noul protocol. Avantajul accuracy/cost și efectul ensembling-ului nu sunt stabilite de scorurile istorice. Este necesară estimarea costului înaintea experimentelor lungi.
 
 %==============================================================================
 % VI. DISCUȚII: IMPLICAȚII ȘI LIMITĂRI
@@ -389,7 +408,7 @@ Pipeline-ul clasic (HOG/LBP + SVM) rulează rapid pe CPU și este potrivit pentr
 
 \subsection{Aplicabilitate Practică}
 
-Sistemul poate fi integrat în aplicații de monitorizare a stării emoționale, analiză comportamentală în educație sau suport pentru UX. Datorită cerințelor compute reduse, poate rula local, fără infrastructură specializată.
+Scopul actual este un studiu educațional de clasificare a expresiilor etichetate. Nu sunt demonstrate măsurarea stării interioare, utilizarea pentru monitorizare psihologică sau cerințe de latență pentru o aplicație live.
 
 \subsection{Limitări}
 
@@ -409,7 +428,7 @@ Recunoașterea emoțiilor implică aspecte de confidențialitate și consimțăm
 %==============================================================================
 \section{Impact Tehnic și Științific în Inginerie și Data Science}
 
-Proiectul demonstrează că metodele clasice, corect calibrate și evaluate, pot obține performanțe solide pe dataset-uri specifice, oferind un baseline robust și interpretabil. Din perspectiva ingineriei, arhitectura modulară (scripturi + backend + frontend) facilitează reproducibilitatea și testarea sistematică.
+Contribuția verificabilă în această etapă este infrastructura software și controlul protocolului prin teste sintetice. Reevaluarea checkpoint-ului HOG pe validarea istorică a reprodus accuracy 0.432857 și matricea de confuzie; macro-F1 este 0.390162. Aceste valori rămân exploratorii din cauza contaminării split-ului și nu stabilesc o comparație nouă HOG--CNN.
 
 %==============================================================================
 % VIII. CONCLUZII ȘI DIRECȚII VIITOARE
@@ -418,7 +437,7 @@ Proiectul demonstrează că metodele clasice, corect calibrate și evaluate, pot
 
 \subsection{Contribuții Principale}
 
-Lucrarea a prezentat un pipeline complet și reproductibil pentru recunoașterea emoțiilor faciale, integrând atât metode clasice (HOG/LBP + SVM), cât și CNN-uri moderne (ResNet, EfficientNet) și ensembling într-un sistem software coerent. Selecția automată a modelului pe validare și generarea \texttt{submission.csv} asigură o strategie obiectivă orientată către acuratețe.
+A fost construit un flux software pentru comparația metodelor standard. Comparația internă retrospectivă a fost executată cu weights ResNet18 oficiali și gruparea duplicatelor cunoscute, fără a substitui testul oficial; declarația de licență a distribuției FER2013 a fost documentată ulterior, iar drepturile fotografiilor, identitățile și etichetele testului oficial rămân de clarificat; noul protocol exportă predicții și metrici comune și păstrează selecția pe validare separată de test.
 
 \subsection{Direcții Viitoare}
 

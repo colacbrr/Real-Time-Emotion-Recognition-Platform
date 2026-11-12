@@ -12,7 +12,7 @@ if [ ! -d ".venv" ]; then
 fi
 . .venv/bin/activate
 python -m pip install -r requirements.txt
-uvicorn search_server:app --reload --port 8000 &
+uvicorn server:app --reload --port 8000 &
 BACKEND_PID=$!
 
 cleanup() {
